@@ -1,0 +1,21 @@
+/* Custom styles for the Payload admin panel. */
+
+/* "Hidden" pill in the Posts list's Hidden column */
+.post-hidden-marker {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  background: #b45309;
+  color: #fff;
+}
+
+/* Tint the whole row of a hidden post (the marker cell is the hook) */
+.table tr:has(.post-hidden-marker) td {
+  background: rgba(180, 83, 9, 0.12);
+}
+
+html[data-theme='dark'] .table tr:has(.post-hidden-marker) td {
+  background: rgba(180, 83, 9, 0.22);
+}
