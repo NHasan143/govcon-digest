@@ -60,7 +60,7 @@ After changing any Payload collection: run `npm run payload -- migrate:create <n
 
 ## Git workflow
 
-This checkout starts without git history. Initialize a fresh repo for Govcon Digest and use whatever branching model the team prefers.
+Repo: `https://github.com/NHasan143/govcon-digest` (`main`). Use whatever branching model the team prefers.
 
 ## Deployment
 
