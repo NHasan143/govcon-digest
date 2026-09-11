@@ -13,6 +13,34 @@ const companyLinks = [
   { label: "Editorial Standards", href: "/editorial-standards" },
 ];
 
+// Official social profiles — URLs live in lib/config.ts (env-overridable)
+const socialLinks = [
+  {
+    label: "Facebook",
+    href: SITE.socials.facebook,
+    icon: "ti-facebook",
+    className: "facebook-icon",
+  },
+  {
+    label: "Twitter / X",
+    href: SITE.socials.twitter,
+    icon: "ti-twitter-alt",
+    className: "twitter-icon",
+  },
+  {
+    label: "LinkedIn",
+    href: SITE.socials.linkedin,
+    icon: "ti-linkedin",
+    className: "linkedin-icon",
+  },
+  {
+    label: "Instagram",
+    href: SITE.socials.instagram,
+    icon: "ti-instagram",
+    className: "instagram-icon",
+  },
+];
+
 // Legal pages — shown below the divider, next to the copyright
 const legalLinks = [
   { label: "Privacy Policy", href: "/privacy" },
@@ -54,39 +82,25 @@ export default function Footer({
                   </h4>
                   <div className="textwidget">
                     <p style={{ maxWidth: 260 }}>{SITE.tagline}</p>
-                    <p>
-                      <strong className="color-black">Address</strong>
-                      <br />
-                      {SITE.address.street}
-                      <br />
-                      {SITE.address.locality}, {SITE.address.region} {SITE.address.postalCode}
-                    </p>
                     <ul className="header-social-network d-inline-block list-inline font-small">
                       <li className="list-inline-item">
                         <span className="text-uppercase">
                           <strong className="color-black">Follow us:</strong>
                         </span>
                       </li>
-                      <li className="list-inline-item">
-                        <a className="social-icon facebook-icon text-xs-center" target="_blank" href="#">
-                          <i className="ti-facebook" />
-                        </a>
-                      </li>
-                      <li className="list-inline-item">
-                        <a className="social-icon twitter-icon text-xs-center" target="_blank" href="#">
-                          <i className="ti-twitter-alt" />
-                        </a>
-                      </li>
-                      <li className="list-inline-item">
-                        <a className="social-icon pinterest-icon text-xs-center" target="_blank" href="#">
-                          <i className="ti-pinterest" />
-                        </a>
-                      </li>
-                      <li className="list-inline-item">
-                        <a className="social-icon instagram-icon text-xs-center" target="_blank" href="#">
-                          <i className="ti-instagram" />
-                        </a>
-                      </li>
+                      {socialLinks.map((social) => (
+                        <li key={social.label} className="list-inline-item">
+                          <a
+                            className={`social-icon ${social.className} text-xs-center`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            href={social.href}
+                            aria-label={social.label}
+                          >
+                            <i className={social.icon} />
+                          </a>
+                        </li>
+                      ))}
                     </ul>
                   </div>
                 </div>
