@@ -1,8 +1,9 @@
-// Payload DB migrations index.
-//
-// This project starts with no migrations. After defining the Govcon Digest
-// content model, create the first migration with:
-//   npm run payload -- migrate:create initial
-// commit the generated file, then run `npm run migrate`.
+import * as migration_20260911_204751_initial from './20260911_204751_initial';
 
-export const migrations = []
+export const migrations = [
+  {
+    up: migration_20260911_204751_initial.up,
+    down: migration_20260911_204751_initial.down,
+    name: '20260911_204751_initial'
+  },
+];
