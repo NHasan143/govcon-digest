@@ -23,8 +23,19 @@ export const SITE = {
         postalCode: process.env.NEXT_PUBLIC_ADDRESS_POSTAL_CODE || '00000',
         country: process.env.NEXT_PUBLIC_ADDRESS_COUNTRY || 'US',
     },
+    // Official social profiles — footer icons link here.
+    socials: {
+        linkedin:
+            process.env.NEXT_PUBLIC_SOCIAL_LINKEDIN ||
+            'https://www.linkedin.com/company/govcondigest/',
+        twitter: process.env.NEXT_PUBLIC_SOCIAL_TWITTER || 'https://x.com/govcondigest',
+        facebook:
+            process.env.NEXT_PUBLIC_SOCIAL_FACEBOOK || 'https://www.facebook.com/govcondigest',
+        instagram:
+            process.env.NEXT_PUBLIC_SOCIAL_INSTAGRAM || 'https://www.instagram.com/govcondigest/',
+    },
     emails: {
-        contact: process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'contact@govcondigest.com',
+        contact: process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'info@govcondigest.com',
         ads: process.env.NEXT_PUBLIC_ADS_EMAIL || 'ads@govcondigest.com',
         sales: process.env.NEXT_PUBLIC_SALES_EMAIL || 'sales@govcondigest.com',
         events: process.env.NEXT_PUBLIC_EVENTS_EMAIL || 'events@govcondigest.com',

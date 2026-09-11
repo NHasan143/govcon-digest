@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { SITE, formatAddress } from "@/lib/config";
+import { SITE } from "@/lib/config";
 import ContactForm from "@/components/sections/contact/ContactForm";
 
 export const metadata: Metadata = {
@@ -39,12 +39,6 @@ const infoCards = [
     title: "Advertising & Partnerships",
     line: "Sponsorships, partner content, and media kits.",
     link: { label: SITE.emails.ads, href: `mailto:${SITE.emails.ads}` },
-  },
-  {
-    icon: "ti-location-pin",
-    title: "Our Office",
-    line: formatAddress(),
-    link: null,
   },
 ];
 
