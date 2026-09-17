@@ -16,14 +16,22 @@ via environment variables — see `.env.example` and `lib/config.ts`.
 
 ## Database
 
-The database is a placeholder — configure it for this project before using the
-CMS. See the `db` block in `payload.config.ts` and `DATABASE_URI` in
-`.env.example`. There are no migrations yet; after defining the content model:
+SQLite by default (`@payloadcms/db-sqlite`); set `DATABASE_URI` in `.env` — a
+local file works for development (`file:./data/payload.db`). Apply migrations
+with `npm run migrate`. To use Postgres or MySQL instead, install the matching
+`@payloadcms/db-*` adapter and swap the call in `payload.config.ts`.
+
+## Demo content
 
 ```bash
-npm run payload -- migrate:create initial
-npm run migrate
+node --env-file=.env --import tsx scripts/seed-govcon.ts           # seed
+node --env-file=.env --import tsx scripts/seed-govcon.ts --reset   # wipe + reseed
 ```
+
+Seeds 75 published posts across all seven sections and their subsections, with
+generated cover art, so every homepage block fills. **Everything it writes is
+placeholder copy — the companies, figures and events are invented to
+demonstrate layout. Replace it before launch.**
 
 ## Commands
 
