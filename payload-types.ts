@@ -133,7 +133,34 @@ export interface Post {
   id: number;
   title: string;
   category:
-    'ai-automation' | 'us-economy' | 'business-finance' | 'science-technology' | 'health-medicine' | 'international';
+    | 'government-contracting'
+    | 'contracts-awards'
+    | 'federal-procurement'
+    | 'small-business-contracting'
+    | 'defense'
+    | 'defense-contracts'
+    | 'military-technology'
+    | 'national-security'
+    | 'artificial-intelligence'
+    | 'federal-ai'
+    | 'ai-contracts'
+    | 'ai-companies'
+    | 'cybersecurity'
+    | 'federal-cybersecurity'
+    | 'cyber-policy'
+    | 'cyber-threats'
+    | 'federal-technology'
+    | 'it-modernization'
+    | 'government-data'
+    | 'contractor-policy'
+    | 'financial-news'
+    | 'corporate-finance'
+    | 'markets'
+    | 'govcon-financials'
+    | 'executive-moves'
+    | 'federal-leadership'
+    | 'govcon-leadership'
+    | 'workforce-leadership';
   content: {
     root: {
       type: string;
@@ -299,7 +326,34 @@ export interface News {
   id: number;
   title: string;
   category:
-    'ai-automation' | 'us-economy' | 'business-finance' | 'science-technology' | 'health-medicine' | 'international';
+    | 'government-contracting'
+    | 'contracts-awards'
+    | 'federal-procurement'
+    | 'small-business-contracting'
+    | 'defense'
+    | 'defense-contracts'
+    | 'military-technology'
+    | 'national-security'
+    | 'artificial-intelligence'
+    | 'federal-ai'
+    | 'ai-contracts'
+    | 'ai-companies'
+    | 'cybersecurity'
+    | 'federal-cybersecurity'
+    | 'cyber-policy'
+    | 'cyber-threats'
+    | 'federal-technology'
+    | 'it-modernization'
+    | 'government-data'
+    | 'contractor-policy'
+    | 'financial-news'
+    | 'corporate-finance'
+    | 'markets'
+    | 'govcon-financials'
+    | 'executive-moves'
+    | 'federal-leadership'
+    | 'govcon-leadership'
+    | 'workforce-leadership';
   content: {
     root: {
       type: string;

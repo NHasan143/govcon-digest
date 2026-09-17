@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { NoScript } from "@/components/elements/NoScriptFallback";
-import { CATEGORIES } from "@/lib/categories";
+import { PARENT_CATEGORIES } from "@/lib/categories";
 
 interface SearchFormProps {
   className?: string;
@@ -17,7 +17,7 @@ interface SearchFormProps {
 export default function SearchForm({
   className = "",
   placeholder = "Type your key words and hit enter",
-  suggestions = CATEGORIES.map((c) => ({ label: c.name, href: `/${c.slug}` })),
+  suggestions = PARENT_CATEGORIES.map((c) => ({ label: c.name, href: `/${c.slug}` })),
   onSubmit
 }: SearchFormProps) {
   return (

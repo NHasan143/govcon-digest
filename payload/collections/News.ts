@@ -2,7 +2,7 @@ import { type CollectionConfig, type Where } from 'payload'
 import { formatSlug } from '../utils/formatSlug'
 import { customSchemaField } from '../fields/customSchema'
 import { focusKeywordField, relevantKeywordsField } from '../fields/seoKeywords'
-import { CATEGORIES } from '../../lib/categories'
+import { CATEGORY_OPTIONS } from '../../lib/categories'
 
 /* News posts — same shape and categories as blog Posts, but rendered at
    /stories/{slug} instead of /{category}/{slug}. The separate collection IS
@@ -49,7 +49,7 @@ export const News: CollectionConfig = {
             name: 'category',
             type: 'select',
             required: true,
-            options: CATEGORIES.map((c) => ({ label: c.name, value: c.slug })),
+            options: CATEGORY_OPTIONS,
         },
         {
             name: 'content',
