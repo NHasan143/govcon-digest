@@ -1,34 +1,40 @@
-import Section1 from "@/components/sections/home-2/Section1";
-import Section2 from "@/components/sections/home-2/Section2";
-import Section3 from "@/components/sections/home-2/Section3";
-import Section4 from "@/components/sections/home/Section7";
-import SuspenseWrapper from "@/components/elements/SuspenseWrapper";
 import { Metadata } from "next";
 import { SITE } from "@/lib/config";
+import { PARENT_CATEGORIES, getCategoryFamily } from "@/lib/categories";
 import {
   getFeaturedPosts,
-  getHomepageNews,
   getHomepagePosts,
+  getSectionPosts,
   getSliderFeaturedPosts,
-  newsToArticle,
   postToArticle,
 } from "@/lib/cms";
+import HomeHero from "@/components/home/HomeHero";
+import { CardRow, EditorsPicks, FeatureRail } from "@/components/home/Rails";
+import { styles } from "@/components/home/primitives";
 
 // Render per-request so newly published CMS posts appear immediately
 export const dynamic = "force-dynamic";
 
-// Home page metadata
 export const metadata: Metadata = {
-  title: "Latest News, Breaking Stories & In-Depth Analysis",
-  description: "Get the latest breaking news, in-depth analysis, and comprehensive coverage of current events. Stay informed with our trusted journalism and insightful reporting on politics, technology, business, sports, and entertainment.",
-  keywords: ["breaking news", "latest news", "current events", "politics", "technology", "business", "sports", "entertainment", "analysis", "journalism"],
-  alternates: {
-    canonical: "/",
-  },
-  // og:image comes from app/(frontend)/opengraph-image.png (file convention)
+  title: "Government Contracting, Defense & Federal Technology News",
+  description:
+    "Govcon Digest covers the business of government: contract awards, federal procurement, defense programs, artificial intelligence, cybersecurity, federal technology, financial news and executive moves.",
+  keywords: [
+    "government contracting",
+    "federal procurement",
+    "contract awards",
+    "defense contracts",
+    "federal AI",
+    "federal cybersecurity",
+    "IT modernization",
+    "GovCon financials",
+    "executive moves",
+  ],
+  alternates: { canonical: "/" },
   openGraph: {
-    title: `${SITE.name} — Clear, Source-Led News in Minutes`,
-    description: `A few minutes with ${SITE.name} can save you hours of scrolling. Briefings on AI, business, the US economy, science, health, and world affairs — every story linked to its source.`,
+    title: `${SITE.name} — Government Contracting, Defense & Federal Technology News`,
+    description:
+      "Daily reporting on contract awards, federal procurement, defense programs, AI, cybersecurity and the executives shaping the federal market.",
     url: SITE.url,
     siteName: SITE.name,
     locale: "en_US",
@@ -36,8 +42,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `${SITE.name} — Clear, Source-Led News in Minutes`,
-    description: `A few minutes with ${SITE.name} can save you hours of scrolling. Briefings on AI, business, the US economy, science, health, and world affairs.`,
+    title: `${SITE.name} — Government Contracting & Federal Technology News`,
+    description:
+      "Daily reporting on contract awards, federal procurement, defense programs, AI, cybersecurity and the executives shaping the federal market.",
   },
   robots: {
     index: true,
@@ -52,78 +59,101 @@ export const metadata: Metadata = {
   },
 };
 
+/* Homepage slot budget — the page allocates from newest-first pools and each
+   block takes exactly this many posts. */
+const HERO_SIDE = 2; //  left column, stacked
+const HERO_LATEST = 5; //  right-hand LATEST rail
+const HIGHLIGHTS = 5; //  Today's Highlights
+const EDITORS = 5; //  Editor's Picked
+const SECTION_POSTS = 5; //  each of the seven section rails
+
 export default async function Home() {
-  // Hero comes from editor-controlled flags: the left slider rotates every
-  // "Slider featured" post; the right column holds the (max 4) "Featured"
-  // posts. The remaining sections take the latest published posts, minus
-  // whatever the hero already shows. With too little content, sections fall
-  // back to their built-in template markup.
-  const [sliderPosts, featuredPosts, latestPosts, latestNews] = await Promise.all([
+  /* The hero's three featured slots stay editor-controlled: "Slider featured"
+     supplies the lead story, "Featured" the two beside it. Anything an editor
+     leaves unticked is filled from the newest posts, so the band is never
+     ragged. Everything below the hero is purely chronological. */
+  const [sliderPosts, featuredPosts, latestPosts] = await Promise.all([
     getSliderFeaturedPosts(),
     getFeaturedPosts(),
-    getHomepagePosts(),
-    getHomepageNews(),
+    getHomepagePosts(60),
   ]);
 
-  // The right-hand hero column is editor-controlled ("Featured", max 4), but
-  // with nothing ticked it left a visible gap beside the slider. Any unused
-  // slots are filled with the newest posts the hero isn't already showing, so
-  // the column is never empty; ticking "Featured" still takes precedence.
-  const HERO_SIDEBAR_SLOTS = 4;
-  const heroRendered = sliderPosts.length > 0 || featuredPosts.length > 0;
-  const alreadyInHero = new Set([...sliderPosts, ...featuredPosts].map((p) => p.id));
-  const sidebarFiller = heroRendered
-    ? latestPosts
-        .filter((p) => !alreadyInHero.has(p.id))
-        .slice(0, Math.max(0, HERO_SIDEBAR_SLOTS - featuredPosts.length))
-    : [];
+  const used = new Set<number>();
+  const take = (pool: typeof latestPosts, n: number) => {
+    const picked = pool.filter((p) => !used.has(p.id)).slice(0, n);
+    picked.forEach((p) => used.add(p.id));
+    return picked;
+  };
 
-  const sliderArticles = sliderPosts.map(postToArticle);
-  const featuredArticles = [...featuredPosts, ...sidebarFiller].map(postToArticle);
-  const heroIds = new Set(
-    [...sliderPosts, ...featuredPosts, ...sidebarFiller].map((p) => p.id),
+  // Hero: editor picks first, then newest-first filler for any empty slot.
+  const lead = take(sliderPosts, 1)[0] ?? take(latestPosts, 1)[0];
+  const side = [...take(featuredPosts, HERO_SIDE), ...take(latestPosts, HERO_SIDE)].slice(
+    0,
+    HERO_SIDE,
   );
-  // Blog posts and news share the non-hero sections, newest first; news
-  // articles link to /stories/{slug}
-  const rest = [
-    ...latestPosts
-      .filter((p) => !heroIds.has(p.id))
-      .map((p) => ({ article: postToArticle(p), date: p.publishedAt || p.createdAt })),
-    ...latestNews.map((d) => ({ article: newsToArticle(d), date: d.publishedAt || d.createdAt })),
-  ]
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-    .map((x) => x.article);
+  const latest = take(latestPosts, HERO_LATEST);
 
-  // Only real CMS posts are ever rendered — sections with nothing to show are
-  // skipped entirely (the template demo defaults must never leak through).
-  const hasHero = sliderArticles.length > 0 || featuredArticles.length > 0;
-  const hasAnything = hasHero || rest.length > 0;
-
-  if (!hasAnything) {
+  // Nothing published yet — show the empty state rather than a broken grid.
+  if (!lead) {
     return (
-      <div className="text-center pt-100 pb-100">
+      <div className={styles.empty}>
         <h2 className="font-weight-900 mb-15">No articles yet</h2>
         <p className="text-muted">New stories are on the way — check back soon.</p>
       </div>
     );
   }
 
+  const highlights = take(latestPosts, HIGHLIGHTS);
+  const editors = take(latestPosts, EDITORS);
+
+  /* Section rails. Each queries its own family (the section plus its three
+     subsections) so a rail is filled from that desk's coverage rather than
+     from whatever happens to be newest site-wide. Run in parallel; posts
+     already placed above are excluded so nothing appears twice. */
+  const sectionRails = await Promise.all(
+    PARENT_CATEGORIES.map(async (section) => ({
+      section,
+      posts: await getSectionPosts(getCategoryFamily(section.slug), SECTION_POSTS, used),
+    })),
+  );
+
   return (
-    <>
-      {hasHero && (
-        <SuspenseWrapper skeletonType="grid" skeletonCount={4}>
-          <Section1 sliderArticles={sliderArticles} sidebarArticles={featuredArticles} />
-        </SuspenseWrapper>
-      )}
-      {rest.length > 0 && <Section2 articles={rest.slice(0, 10)} />}
-      {rest.length > 10 && (
-        <Section3 mainArticles={rest.slice(10, 12)} sidebarArticles={rest.slice(12, 14)} />
-      )}
-      {rest.length > 14 && (
-        <SuspenseWrapper skeletonType="list" skeletonCount={5}>
-          <Section4 articles={rest.slice(14, 23)} />
-        </SuspenseWrapper>
-      )}
-    </>
+    <div className={styles.home}>
+      <HomeHero
+        lead={postToArticle(lead)}
+        side={side.map(postToArticle)}
+        latest={latest.map(postToArticle)}
+      />
+
+      <CardRow
+        title="Today's Highlights"
+        href="/latest"
+        articles={highlights.map(postToArticle)}
+        columns={5}
+      />
+
+      <EditorsPicks title="Editor's Picked" articles={editors.map(postToArticle)} />
+
+      {/* One rail per section, in registry order. A rail with nothing to show
+          is skipped rather than rendered empty. Layout alternates between the
+          four-across row and the feature grid to break up the page. */}
+      {sectionRails.map(({ section, posts }, index) => {
+        if (posts.length === 0) return null;
+        const articles = posts.map(postToArticle);
+        const props = {
+          title: section.name,
+          href: `/${section.slug}`,
+          accent: section.color,
+          articles,
+        };
+        // Every third rail gets the feature treatment, and only when it has
+        // the full five posts that layout is designed around.
+        return index % 3 === 2 && articles.length === SECTION_POSTS ? (
+          <FeatureRail key={section.slug} {...props} />
+        ) : (
+          <CardRow key={section.slug} {...props} articles={articles.slice(0, 4)} />
+        );
+      })}
+    </div>
   );
 }

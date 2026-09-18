@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { FooterProps } from "@/types";
 import { SITE } from "@/lib/config";
-import { CATEGORIES } from "@/lib/categories";
+import { PARENT_CATEGORIES } from "@/lib/categories";
 
 const companyLinks = [
   { label: "Home", href: "/" },
@@ -108,7 +108,7 @@ export default function Footer({
               <div className="col-lg-4 col-md-6 mb-lg-0 mb-md-4 mb-sm-4">
                 <h5 className="mb-15">Category</h5>
                 <ul className="float-start mr-30 font-small">
-                  {CATEGORIES.map((category) => (
+                  {PARENT_CATEGORIES.map((category) => (
                     <li key={category.slug} className="cat-item">
                       <Link href={`/${category.slug}`}>{category.name}</Link>
                     </li>
