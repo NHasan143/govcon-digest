@@ -185,14 +185,6 @@ export interface Post {
      * Optional. Paste extra Schema.org JSON-LD for this article (e.g. FAQPage). Added alongside the automatic NewsArticle schema — do not repeat it here. Paste only the JSON itself, without <script> tags.
      */
     customSchema?: string | null;
-    /**
-     * Internal only — never shown on the site or in meta tags. The single keyword this article targets.
-     */
-    focusKeyword?: string | null;
-    /**
-     * Internal only — never shown on the site or in meta tags. Press Enter after each keyword.
-     */
-    relevantKeywords?: string[] | null;
   };
   slug: string;
   author: number | User;
@@ -378,14 +370,6 @@ export interface News {
      * Optional. Paste extra Schema.org JSON-LD for this article (e.g. FAQPage). Added alongside the automatic NewsArticle schema — do not repeat it here. Paste only the JSON itself, without <script> tags.
      */
     customSchema?: string | null;
-    /**
-     * Internal only — never shown on the site or in meta tags. The single keyword this article targets.
-     */
-    focusKeyword?: string | null;
-    /**
-     * Internal only — never shown on the site or in meta tags. Press Enter after each keyword.
-     */
-    relevantKeywords?: string[] | null;
   };
   slug: string;
   author: number | User;
@@ -560,8 +544,6 @@ export interface PostsSelect<T extends boolean = true> {
         metaDescription?: T;
         ogImage?: T;
         customSchema?: T;
-        focusKeyword?: T;
-        relevantKeywords?: T;
       };
   slug?: T;
   author?: T;
@@ -597,8 +579,6 @@ export interface NewsSelect<T extends boolean = true> {
         metaDescription?: T;
         ogImage?: T;
         customSchema?: T;
-        focusKeyword?: T;
-        relevantKeywords?: T;
       };
   slug?: T;
   author?: T;

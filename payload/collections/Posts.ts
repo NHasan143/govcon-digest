@@ -1,7 +1,6 @@
 import { APIError, type CollectionConfig, type Where } from 'payload'
 import { formatSlug } from '../utils/formatSlug'
 import { customSchemaField } from '../fields/customSchema'
-import { focusKeywordField, relevantKeywordsField } from '../fields/seoKeywords'
 import { CATEGORY_OPTIONS } from '../../lib/categories'
 
 export const MAX_FEATURED = 4
@@ -97,8 +96,6 @@ export const Posts: CollectionConfig = {
                 { name: 'metaDescription', type: 'textarea' },
                 { name: 'ogImage', type: 'upload', relationTo: 'media' },
                 customSchemaField,
-                focusKeywordField,
-                relevantKeywordsField,
             ],
         },
         {

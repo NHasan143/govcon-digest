@@ -1,7 +1,6 @@
 import { type CollectionConfig, type Where } from 'payload'
 import { formatSlug } from '../utils/formatSlug'
 import { customSchemaField } from '../fields/customSchema'
-import { focusKeywordField, relevantKeywordsField } from '../fields/seoKeywords'
 import { CATEGORY_OPTIONS } from '../../lib/categories'
 
 /* News posts — same shape and categories as blog Posts, but rendered at
@@ -69,8 +68,6 @@ export const News: CollectionConfig = {
                 { name: 'metaDescription', type: 'textarea' },
                 { name: 'ogImage', type: 'upload', relationTo: 'media' },
                 customSchemaField,
-                focusKeywordField,
-                relevantKeywordsField,
             ],
         },
         {
