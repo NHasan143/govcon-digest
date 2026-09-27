@@ -133,7 +133,34 @@ export interface Post {
   id: number;
   title: string;
   category:
-    'ai-automation' | 'us-economy' | 'business-finance' | 'science-technology' | 'health-medicine' | 'international';
+    | 'government-contracting'
+    | 'contracts-awards'
+    | 'federal-procurement'
+    | 'small-business-contracting'
+    | 'defense'
+    | 'defense-contracts'
+    | 'military-technology'
+    | 'national-security'
+    | 'artificial-intelligence'
+    | 'federal-ai'
+    | 'ai-contracts'
+    | 'ai-companies'
+    | 'cybersecurity'
+    | 'federal-cybersecurity'
+    | 'cyber-policy'
+    | 'cyber-threats'
+    | 'federal-technology'
+    | 'it-modernization'
+    | 'government-data'
+    | 'contractor-policy'
+    | 'financial-news'
+    | 'corporate-finance'
+    | 'markets'
+    | 'govcon-financials'
+    | 'executive-moves'
+    | 'federal-leadership'
+    | 'govcon-leadership'
+    | 'workforce-leadership';
   content: {
     root: {
       type: string;
@@ -158,14 +185,6 @@ export interface Post {
      * Optional. Paste extra Schema.org JSON-LD for this article (e.g. FAQPage). Added alongside the automatic NewsArticle schema — do not repeat it here. Paste only the JSON itself, without <script> tags.
      */
     customSchema?: string | null;
-    /**
-     * Internal only — never shown on the site or in meta tags. The single keyword this article targets.
-     */
-    focusKeyword?: string | null;
-    /**
-     * Internal only — never shown on the site or in meta tags. Press Enter after each keyword.
-     */
-    relevantKeywords?: string[] | null;
   };
   slug: string;
   author: number | User;
@@ -299,7 +318,34 @@ export interface News {
   id: number;
   title: string;
   category:
-    'ai-automation' | 'us-economy' | 'business-finance' | 'science-technology' | 'health-medicine' | 'international';
+    | 'government-contracting'
+    | 'contracts-awards'
+    | 'federal-procurement'
+    | 'small-business-contracting'
+    | 'defense'
+    | 'defense-contracts'
+    | 'military-technology'
+    | 'national-security'
+    | 'artificial-intelligence'
+    | 'federal-ai'
+    | 'ai-contracts'
+    | 'ai-companies'
+    | 'cybersecurity'
+    | 'federal-cybersecurity'
+    | 'cyber-policy'
+    | 'cyber-threats'
+    | 'federal-technology'
+    | 'it-modernization'
+    | 'government-data'
+    | 'contractor-policy'
+    | 'financial-news'
+    | 'corporate-finance'
+    | 'markets'
+    | 'govcon-financials'
+    | 'executive-moves'
+    | 'federal-leadership'
+    | 'govcon-leadership'
+    | 'workforce-leadership';
   content: {
     root: {
       type: string;
@@ -324,14 +370,6 @@ export interface News {
      * Optional. Paste extra Schema.org JSON-LD for this article (e.g. FAQPage). Added alongside the automatic NewsArticle schema — do not repeat it here. Paste only the JSON itself, without <script> tags.
      */
     customSchema?: string | null;
-    /**
-     * Internal only — never shown on the site or in meta tags. The single keyword this article targets.
-     */
-    focusKeyword?: string | null;
-    /**
-     * Internal only — never shown on the site or in meta tags. Press Enter after each keyword.
-     */
-    relevantKeywords?: string[] | null;
   };
   slug: string;
   author: number | User;
@@ -506,8 +544,6 @@ export interface PostsSelect<T extends boolean = true> {
         metaDescription?: T;
         ogImage?: T;
         customSchema?: T;
-        focusKeyword?: T;
-        relevantKeywords?: T;
       };
   slug?: T;
   author?: T;
@@ -543,8 +579,6 @@ export interface NewsSelect<T extends boolean = true> {
         metaDescription?: T;
         ogImage?: T;
         customSchema?: T;
-        focusKeyword?: T;
-        relevantKeywords?: T;
       };
   slug?: T;
   author?: T;

@@ -461,3 +461,108 @@ p {
         overflow-x: auto;
     }
 }
+
+/* ============================================================
+   Govcon Digest header nav
+   Seven full section names plus "Latest" have to fit one row, so the
+   template's 20px-per-side item padding is tightened and the type stepped
+   down. Each section opens its three subsections on hover — the panel itself
+   is the template's `ul.sub-menu`, widened here so two-word subsection names
+   do not wrap.
+   ============================================================ */
+.main-header .main-nav ul.govcon-nav > li {
+    /* Seven section names plus "Latest" must fit one row at every desktop
+       width, so the step is fluid rather than a set of breakpoints. */
+    padding: 0 clamp(6px, 0.72vw, 14px);
+}
+
+.main-header .main-nav ul.govcon-nav > li > a {
+    font-size: clamp(10px, 0.83vw, 12.5px);
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+}
+
+/* The template draws a caret via ::before on any item with children. With
+   every section now having a dropdown that reads as clutter, so it is dropped
+   and the reserved padding reclaimed. */
+.main-header .main-nav ul.govcon-nav > li.menu-item-has-children > a {
+    padding-right: 0;
+}
+
+.main-header .main-nav ul.govcon-nav > li.menu-item-has-children > a::before {
+    content: none;
+}
+
+.main-header .main-nav ul.govcon-nav ul.sub-menu {
+    min-width: 232px;
+    padding: 12px 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.main-header .main-nav ul.govcon-nav ul.sub-menu > li {
+    padding: 0 18px;
+}
+
+.main-header .main-nav ul.govcon-nav ul.sub-menu > li > a {
+    font-size: 12.5px;
+    line-height: 32px;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+}
+
+.main-header .main-nav ul.govcon-nav ul.sub-menu > li > a:hover {
+    text-decoration: underline;
+}
+
+/* The gap between a section label and its panel would otherwise drop the
+   hover; this bridges it so the pointer can travel down into the panel. */
+.main-header .main-nav ul.govcon-nav > li.menu-item-has-children::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    height: 14px;
+}
+
+/* Mobile menu: the section label is a link and the +/- is its own button, so
+   they need to sit on one row without the template's anchor styling. */
+.slicknav_nav .slicknav_row > a {
+    flex: 1 1 auto;
+}
+
+.slicknav_nav .slicknav_row > button.slicknav_arrow {
+    flex: none;
+    padding: 0 6px;
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+    color: inherit;
+}
+
+/* Masthead: search left, logo centred, Subscribe right. The side cells are
+   given equal fixed width so the logo stays optically centred regardless of
+   how wide the button renders. */
+.masthead-side {
+    flex: 0 0 150px;
+    width: 150px;
+}
+
+@media (max-width: 991px) {
+    .masthead-row {
+        justify-content: center;
+    }
+}
+
+/* The template's icon swap is scoped to `header .search-icon`; the search
+   button now lives in the masthead above the header, so it needs the same
+   rules at its new address. */
+.masthead .search-icon .ti-close,
+.open-search-form .masthead .search-icon .ti-search {
+    display: none;
+}
+
+.open-search-form .masthead .search-icon .ti-close {
+    display: inline;
+}

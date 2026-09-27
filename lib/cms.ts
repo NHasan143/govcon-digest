@@ -39,6 +39,32 @@ export async function getHomepagePosts(limit = 40): Promise<Post[]> {
     }
 }
 
+/* Latest published posts for one homepage section rail. `slugs` is the
+   category family (a section plus its three subsections — getCategoryFamily),
+   so a rail shows everything filed anywhere under that section.
+   `exclude` keeps a post from appearing twice on the page; the query
+   over-fetches by that many so the rail still fills after filtering. */
+export async function getSectionPosts(
+    slugs: string[],
+    limit: number,
+    exclude: Set<number> = new Set(),
+): Promise<Post[]> {
+    try {
+        const payload = await getPayload({ config })
+        const { docs } = await payload.find({
+            collection: 'posts',
+            where: { category: { in: slugs } },
+            sort: '-publishedAt',
+            limit: limit + exclude.size,
+            depth: 1,
+            overrideAccess: false, // published only
+        })
+        return docs.filter((d) => !exclude.has(d.id)).slice(0, limit)
+    } catch {
+        return []
+    }
+}
+
 // Published news for the homepage sections (rendered at /stories/{slug})
 export async function getHomepageNews(limit = 40): Promise<NewsDoc[]> {
     try {

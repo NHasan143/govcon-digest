@@ -42,35 +42,34 @@ export default function Header({ variant = "default", showSearch = true, showSoc
 
     return (
         <>
-            {/* Masthead — logo centered above the navbar, Semafor-style.
-                Scrolls away while the navbar below stays sticky. */}
-            <div className="masthead text-center pt-20 pb-10">
-                <Link href="/" className="d-inline-block">
-                    <Image
-                        src="/logo.png"
-                        alt={`${SITE.name} logo`}
-                        width={141}
-                        height={90}
-                        priority
-                        style={{ objectFit: "contain", height: 90, width: "auto" }}
-                    />
-                </Link>
-            </div>
-            {/* Start Header */}
-            <header className={`${styles.header} main-header header-style-1 font-heading header-sticky ${scroll ? "sticky-bar" : ""}`}>
-                <MobileMenu />
-                <div className="container position-relative">
-                    {/* Centered menu; search + subscribe pinned to the right */}
-                    <div className="main-nav d-none d-lg-block text-center">
-                        <nav className="text-uppercase d-inline-block">
-                            <MainMenu />
-                        </nav>
-                    </div>
-                    <div className="header-tools position-absolute top-50 translate-middle-y d-none d-lg-flex align-items-center" style={{ right: 12 }}>
-                        <button type="submit" className="search search-icon search-btn mr-15" onClick={handleSearch}>
+            {/* Masthead — logo centered, search on the left, Subscribe on the
+                right. The tools live up here rather than in the navbar so the
+                seven section names below get the full container width to
+                themselves. Scrolls away while the navbar stays sticky. */}
+            <div className="masthead container pt-20 pb-10">
+                <div className="masthead-row d-flex align-items-center justify-content-between">
+                    <div className="masthead-side d-none d-lg-flex align-items-center">
+                        <button
+                            type="button"
+                            className="search search-icon search-btn"
+                            onClick={handleSearch}
+                            aria-label="Search"
+                        >
                             <i className="ti-close" />
                             <i className="ti-search" />
                         </button>
+                    </div>
+                    <Link href="/" className="d-inline-block mx-auto">
+                        <Image
+                            src="/logo.png"
+                            alt={`${SITE.name} logo`}
+                            width={141}
+                            height={90}
+                            priority
+                            style={{ objectFit: "contain", height: 90, width: "auto" }}
+                        />
+                    </Link>
+                    <div className="masthead-side d-none d-lg-flex align-items-center justify-content-end">
                         <Link
                             href="/subscribe"
                             className="font-small font-weight-bold text-uppercase"
@@ -85,6 +84,18 @@ export default function Header({ variant = "default", showSearch = true, showSoc
                         >
                             Subscribe
                         </Link>
+                    </div>
+                </div>
+            </div>
+            {/* Start Header */}
+            <header className={`${styles.header} main-header header-style-1 font-heading header-sticky ${scroll ? "sticky-bar" : ""}`}>
+                <MobileMenu />
+                <div className="container position-relative">
+                    {/* Centered menu; search + subscribe pinned to the right */}
+                    <div className="main-nav d-none d-lg-block text-center">
+                        <nav className="text-uppercase d-inline-block">
+                            <MainMenu />
+                        </nav>
                     </div>
                     <div className="clearfix" />
                     <div className="divider-2" />

@@ -1,36 +1,29 @@
 "use client";
 import Link from "next/link";
-import { CATEGORIES } from "@/lib/categories";
+import { PARENT_CATEGORIES } from "@/lib/categories";
 
+/* Desktop nav: Latest + the seven sections, each opening its three
+   subsections on hover. The dropdown is the template's `ul.sub-menu`
+   (CSS-only, `li:hover > ul.sub-menu`); `.govcon-nav` in globals.css tightens
+   the spacing so seven full section names fit on one row. */
 export default function MainMenu() {
     return (
-        <>
-            {/*Desktop menu — category labels per the SEO & content requirements doc*/}
-            <ul className="main-menu d-none d-lg-inline">
-                <li>
-                    <Link href="/latest">Latest</Link>
-                </li>
-                {CATEGORIES.map((category) => (
-                    <li key={category.slug}>
-                        <Link href={`/${category.slug}`}>{category.menuLabel}</Link>
-                    </li>
-                ))}
-                <li>
-                    <Link href="/stories">News</Link>
-                </li>
-                {/* Hover dropdown listing the categories (template CSS handles
-                    li:hover > ul.sub-menu) */}
-                <li className="menu-item-has-children">
-                    <Link href="/topics">Topics</Link>
+        <ul className="main-menu govcon-nav d-none d-lg-inline">
+            <li>
+                <Link href="/latest">Latest</Link>
+            </li>
+            {PARENT_CATEGORIES.map((category) => (
+                <li key={category.slug} className="menu-item-has-children">
+                    <Link href={`/${category.slug}`}>{category.menuLabel ?? category.name}</Link>
                     <ul className="sub-menu">
-                        {CATEGORIES.map((category) => (
-                            <li key={category.slug}>
-                                <Link href={`/${category.slug}`}>{category.name}</Link>
+                        {category.children.map((child) => (
+                            <li key={child.slug}>
+                                <Link href={`/${child.slug}`}>{child.name}</Link>
                             </li>
                         ))}
                     </ul>
                 </li>
-            </ul>
-        </>
+            ))}
+        </ul>
     );
 }

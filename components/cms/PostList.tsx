@@ -50,15 +50,27 @@ export function PostList({
                         <li key={post.id} className="mb-30 pb-30 border-bottom">
                             <div className="d-flex">
                                 {cover?.url && (
-                                    <div className="post-thumb d-flex mr-15 border-radius-5 img-hover-scale">
-                                        <Link href={hrefFor(post)}>
+                                    /* Fixed basis, not just the img's width attribute: as a
+                                       flex item the thumb would otherwise shrink by however
+                                       much room the headline beside it wanted, leaving each
+                                       row's image a slightly different size. */
+                                    <div
+                                        className="post-thumb d-flex mr-15 border-radius-5 img-hover-scale"
+                                        style={{ flex: '0 0 220px', width: 220 }}
+                                    >
+                                        <Link href={hrefFor(post)} style={{ width: '100%' }}>
                                             {/* eslint-disable-next-line @next/next/no-img-element */}
                                             <img
                                                 src={mediaUrl(cover.url)}
                                                 alt={cover.alt || post.title}
                                                 width={220}
                                                 height={140}
-                                                style={{ objectFit: 'cover', borderRadius: 5 }}
+                                                style={{
+                                                    width: '100%',
+                                                    height: 140,
+                                                    objectFit: 'cover',
+                                                    borderRadius: 5,
+                                                }}
                                             />
                                         </Link>
                                     </div>

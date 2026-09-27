@@ -2,33 +2,30 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { PARENT_CATEGORIES } from "@/lib/categories";
 
 type MenuItem = {
   label: string;
   href?: string;
-  submenu?: MenuItem[];
+  submenu?: { label: string; href: string }[];
 };
 
+/* Mirrors the desktop nav: Latest, the seven sections (each expanding to its
+   three subsections), then Subscribe. Built from the same registry so the two
+   menus can never drift apart. */
 const menuItems: MenuItem[] = [
   { label: "Latest", href: "/latest" },
-  { label: "AI", href: "/ai-automation" },
-  { label: "Economy", href: "/us-economy" },
-  { label: "Business", href: "/business-finance" },
-  { label: "Science & Tech", href: "/science-technology" },
-  { label: "Health", href: "/health-medicine" },
-  { label: "World", href: "/international" },
-  { label: "News", href: "/stories" },
-  {
-    label: "Topics",
+  ...PARENT_CATEGORIES.map((category) => ({
+    label: category.menuLabel ?? category.name,
+    href: `/${category.slug}`,
     submenu: [
-      { label: "AI & Automation", href: "/ai-automation" },
-      { label: "U.S. Economy", href: "/us-economy" },
-      { label: "Business & Finance", href: "/business-finance" },
-      { label: "Science & Technology", href: "/science-technology" },
-      { label: "Health & Medicine", href: "/health-medicine" },
-      { label: "International", href: "/international" },
+      { label: `All ${category.name}`, href: `/${category.slug}` },
+      ...category.children.map((child) => ({
+        label: child.name,
+        href: `/${child.slug}`,
+      })),
     ],
-  },
+  })),
   { label: "Subscribe", href: "/subscribe" },
 ];
 
@@ -46,7 +43,7 @@ export default function MobileMenu() {
     <div className="mobile_menu d-lg-none">
       <div className="slicknav_menu">
         <div className={`container ${isOpen ? "slicknav_collapsed" : "slicknav_open"}`}>
-          <button onClick={toggleMenu} className="slicknav_btn slicknav_collapsed">
+          <button onClick={toggleMenu} className="slicknav_btn slicknav_collapsed" aria-expanded={isOpen} aria-label="Toggle navigation">
             <span className="slicknav_menutxt">MENU</span>
             <span className="slicknav_icon">
               {isOpen ? (
@@ -69,26 +66,38 @@ export default function MobileMenu() {
               <li key={item.label} className={`slicknav_parent ${openSubmenus.includes(item.label) ? "slicknav_open" : "slicknav_collapsed"}`}>
                 {item.submenu ? (
                   <>
-                    <a 
-                      key={`menu-${item.label}`}
-                      onClick={() => toggleSubmenu(item.label)} 
-                      className="slicknav_item slicknav_row"
-                    >
-                      {item.label}
-                      <span className="slicknav_arrow">{openSubmenus.includes(item.label) ? "−" : "+"}</span>
-                    </a>
+                    {/* The label navigates to the section hub; the +/- control
+                        expands the subsections without leaving the page. */}
+                    <span className="slicknav_item slicknav_row d-flex align-items-center justify-content-between">
+                      <Link href={item.href ?? "#"} onClick={() => setIsOpen(false)}>
+                        {item.label}
+                      </Link>
+                      <button
+                        type="button"
+                        onClick={() => toggleSubmenu(item.label)}
+                        aria-expanded={openSubmenus.includes(item.label)}
+                        aria-label={`Toggle ${item.label} subsections`}
+                        className="slicknav_arrow border-0 bg-transparent"
+                      >
+                        {openSubmenus.includes(item.label) ? "−" : "+"}
+                      </button>
+                    </span>
                     {openSubmenus.includes(item.label) && (
                       <ul className="sub-menu text-muted font-small">
                         {item.submenu.map((sub) => (
-                          <li key={sub.label} className="py-1">
-                            <Link href={sub.href ?? "#"}>{sub.label}</Link>
+                          <li key={sub.href} className="py-1">
+                            <Link href={sub.href} onClick={() => setIsOpen(false)}>
+                              {sub.label}
+                            </Link>
                           </li>
                         ))}
                       </ul>
                     )}
                   </>
                 ) : (
-                  <Link href={item.href ?? "#"}>{item.label}</Link>
+                  <Link href={item.href ?? "#"} onClick={() => setIsOpen(false)}>
+                    {item.label}
+                  </Link>
                 )}
               </li>
             ))}
