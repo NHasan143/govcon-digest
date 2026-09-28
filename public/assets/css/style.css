@@ -113,7 +113,7 @@ article {
 }
 
 a:hover {
-    color: #df4a2c;
+    color: #1c75bc;
 }
 
 a:focus,
@@ -272,7 +272,7 @@ sup {
 /*Background*/
 .primary-bg,
 .boxed-btn:hover {
-    background: #df4a2c;
+    background: #1c75bc;
 }
 
 .btn-black {

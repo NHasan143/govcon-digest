@@ -15,7 +15,7 @@ async function getCmsEntries(baseUrl: string): Promise<MetadataRoute.Sitemap> {
     try {
         const payload = await getPayload({ config });
 
-        // Published articles: /{category}/{slug}
+        // Published articles: /{slug}
         const { docs: posts } = await payload.find({
             collection: "posts",
             limit: 1000,
@@ -23,13 +23,13 @@ async function getCmsEntries(baseUrl: string): Promise<MetadataRoute.Sitemap> {
             overrideAccess: false,
         });
         const postEntries: MetadataRoute.Sitemap = posts.map((post) => ({
-            url: `${baseUrl}/${post.category}/${post.slug}`,
+            url: `${baseUrl}/${post.slug}`,
             lastModified: new Date(post.updatedAt),
             changeFrequency: "weekly" as const,
             priority: 0.8,
         }));
 
-        // Published news: /stories/{slug}
+        // Published news: /{slug} (same namespace as posts)
         const { docs: news } = await payload.find({
             collection: "news",
             limit: 1000,
@@ -37,7 +37,7 @@ async function getCmsEntries(baseUrl: string): Promise<MetadataRoute.Sitemap> {
             overrideAccess: false,
         });
         const newsEntries: MetadataRoute.Sitemap = news.map((doc) => ({
-            url: `${baseUrl}/stories/${doc.slug}`,
+            url: `${baseUrl}/${doc.slug}`,
             lastModified: new Date(doc.updatedAt),
             changeFrequency: "weekly" as const,
             priority: 0.8,

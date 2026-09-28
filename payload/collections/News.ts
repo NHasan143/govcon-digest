@@ -1,13 +1,12 @@
 import { type CollectionConfig, type Where } from 'payload'
-import { formatSlug } from '../utils/formatSlug'
+import { articleSlugField } from '../fields/articleSlug'
 import { customSchemaField } from '../fields/customSchema'
 import { CATEGORY_OPTIONS } from '../../lib/categories'
 
-/* News posts — same shape and categories as blog Posts, but rendered at
-   /stories/{slug} instead of /{category}/{slug}. The separate collection IS
-   the "news flag": categories are defined once in lib/categories.ts and
-   shared by both collections. No homepage-hero flags here (those are
-   blog-only). */
+/* News posts — same shape, categories and URL (/{slug}) as blog Posts. The
+   separate collection IS the "news flag": it feeds the /stories index, and
+   categories are defined once in lib/categories.ts and shared by both
+   collections. No homepage-hero flags here (those are blog-only). */
 export const News: CollectionConfig = {
     slug: 'news',
     labels: {
@@ -44,7 +43,7 @@ export const News: CollectionConfig = {
         },
         {
             // Same six categories as blog posts — shown on the article and in
-            // listings; the URL stays /stories/{slug} regardless of category.
+            // listings; the URL is /{slug} regardless of category.
             name: 'category',
             type: 'select',
             required: true,
@@ -70,18 +69,7 @@ export const News: CollectionConfig = {
                 customSchemaField,
             ],
         },
-        {
-            name: 'slug',
-            type: 'text',
-            required: true,
-            unique: true,
-            admin: {
-                position: 'sidebar',
-            },
-            hooks: {
-                beforeValidate: [formatSlug('title')],
-            },
-        },
+        articleSlugField,
         {
             name: 'author',
             type: 'relationship',

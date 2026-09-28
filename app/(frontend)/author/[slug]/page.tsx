@@ -5,7 +5,7 @@ import { maybeRedirect } from '@/lib/redirect-guard'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import { notFound } from 'next/navigation'
-import { newsUrl, postUrl, PostList } from '@/components/cms/PostList'
+import { PostList } from '@/components/cms/PostList'
 import AuthorSocials from '@/components/elements/AuthorSocials'
 import { SITE } from '@/lib/config'
 import type { News, Post } from '@/payload-types'
@@ -14,7 +14,7 @@ type Args = {
     params: Promise<{ slug: string }>
 }
 
-type AuthorDoc = (Post | News) & { isNews?: boolean }
+type AuthorDoc = Post | News
 
 async function getAuthorWithPosts(slug: string) {
     try {
@@ -47,7 +47,7 @@ async function getAuthorWithPosts(slug: string) {
         ])
         const posts: AuthorDoc[] = [
             ...postsRes.docs,
-            ...newsRes.docs.map((d) => ({ ...d, isNews: true })),
+            ...newsRes.docs,
         ].sort(
             (a, b) =>
                 new Date(b.publishedAt || b.createdAt).getTime() -
@@ -93,14 +93,7 @@ export default async function AuthorPage({ params }: Args) {
                 </p>
                 <AuthorSocials socials={data.author.socials} name={data.author.name} />
             </div>
-            <PostList
-                posts={data.posts}
-                hrefFor={(doc) =>
-                    (doc as AuthorDoc).isNews
-                        ? newsUrl(doc)
-                        : postUrl(doc as Parameters<typeof postUrl>[0])
-                }
-            />
+            <PostList posts={data.posts} />
         </div>
     )
 }

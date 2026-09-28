@@ -6,7 +6,7 @@ import { maybeRedirect } from '@/lib/redirect-guard'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import { notFound } from 'next/navigation'
-import { newsUrl, postUrl, PostList } from '@/components/cms/PostList'
+import { PostList } from '@/components/cms/PostList'
 import { SITE } from '@/lib/config'
 import type { News, Post } from '@/payload-types'
 
@@ -21,7 +21,7 @@ const topicName = (slug: string) =>
         .map((w) => w[0].toUpperCase() + w.slice(1))
         .join(' ')
 
-type TopicDoc = (Post | News) & { isNews?: boolean }
+type TopicDoc = Post | News
 
 async function getTopicPosts(slug: string): Promise<TopicDoc[] | null> {
     try {
@@ -49,7 +49,7 @@ async function getTopicPosts(slug: string): Promise<TopicDoc[] | null> {
         ])
         const docs: TopicDoc[] = [
             ...postsRes.docs,
-            ...newsRes.docs.map((d) => ({ ...d, isNews: true })),
+            ...newsRes.docs,
         ]
         return docs.sort(
             (a, b) =>
@@ -94,14 +94,7 @@ export default async function TopicPage({ params }: Args) {
             <div className="entry-header mb-30">
                 <h1 className="entry-title font-weight-900 mb-10">{topicName(slug)}</h1>
             </div>
-            <PostList
-                posts={posts}
-                hrefFor={(doc) =>
-                    (doc as TopicDoc).isNews
-                        ? newsUrl(doc)
-                        : postUrl(doc as Parameters<typeof postUrl>[0])
-                }
-            />
+            <PostList posts={posts} />
         </div>
     )
 }

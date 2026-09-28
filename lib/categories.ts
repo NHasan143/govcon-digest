@@ -2,9 +2,9 @@
  *
  * Two levels: seven top-level sections, each with three subsections. Slugs are
  * FLAT and globally unique — a subsection lives at /{subSlug}/ exactly like a
- * section, so the existing /{category}/ hub and /{category}/{slug} article
- * routes cover both levels with no extra routing (and no collision between a
- * subsection path and an article path).
+ * section, so the one /{category}/ hub route covers both levels. Articles also
+ * live at the root (/{slug}), so article slugs may never equal a category slug
+ * — payload/fields/articleSlug.ts enforces that on save.
  *
  * The parent/child relationship is navigation + aggregation only:
  *   - the header renders the tree (hover dropdown per section)
@@ -33,7 +33,7 @@ export const CATEGORY_TREE: ParentCategory[] = [
     {
         slug: 'government-contracting',
         name: 'Government Contracting',
-        menuLabel: 'Government Contracting',
+        menuLabel: 'GovCon',
         blurb: 'Awards, protests, vehicles and the business of selling to the federal government.',
         color: '#1d4e89',
         children: [

@@ -40,7 +40,7 @@ export default function HomeHero({
                 <Thumb article={lead} ratio="ratio32" sizes="(max-width: 991px) 100vw, 620px" priority />
                 <div className={styles.heroMainBody}>
                     <Kicker article={lead} />
-                    <Headline article={lead} clamp={3} as="h2" />
+                    <Headline article={lead} clamp={3} as="h3" />
                     <Excerpt article={lead} clamp={4} />
                     <DateLine article={lead} />
                 </div>

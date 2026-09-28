@@ -69,17 +69,17 @@ export default function Footer({
               </div>
               <div className="col-lg-4 col-md-6 mb-lg-0 mb-md-4 mb-sm-4">
                 <div className="sidebar-widget widget-latest-posts pr-30">
-                  <h4 className="widget-header mb-15">
+                  <div className="mb-15">
                     <Link href="/" className="d-inline-block">
                       <Image
                         src="/logo.png"
                         alt={`${SITE.name} logo`}
-                        width={110}
-                        height={70}
-                        style={{ objectFit: "contain", height: 70, width: "auto" }}
+                        width={128}
+                        height={48}
+                        style={{ height: 48, width: "auto" }}
                       />
                     </Link>
-                  </h4>
+                  </div>
                   <div className="textwidget">
                     <p style={{ maxWidth: 260 }}>{SITE.tagline}</p>
                     <ul className="header-social-network d-inline-block list-inline font-small">

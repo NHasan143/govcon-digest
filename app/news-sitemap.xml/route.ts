@@ -43,7 +43,7 @@ export async function GET() {
             .filter((doc) => doc.slug && doc.publishedAt)
             .map(
                 (doc) => `  <url>
-    <loc>${escapeXml(`${SITE.url}/stories/${doc.slug}`)}</loc>
+    <loc>${escapeXml(`${SITE.url}/${doc.slug}`)}</loc>
     <news:news>
       <news:publication>
         <news:name>${escapeXml(SITE.name)}</news:name>

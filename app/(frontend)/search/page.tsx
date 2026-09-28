@@ -1,6 +1,6 @@
 import { Metadata } from "next";
-import { searchPosts, type SearchHit } from "@/lib/cms";
-import { newsUrl, postUrl, PostList } from "@/components/cms/PostList";
+import { searchPosts } from "@/lib/cms";
+import { PostList } from "@/components/cms/PostList";
 
 export const dynamic = "force-dynamic";
 
@@ -59,12 +59,7 @@ export default async function Search({ searchParams }: Args) {
         <div className="col-lg-2" />
         <div className="col-lg-8 col-md-12">
           {q ? (
-            <PostList
-              posts={posts}
-              hrefFor={(doc) =>
-                (doc as SearchHit).isNews ? newsUrl(doc) : postUrl(doc as Parameters<typeof postUrl>[0])
-              }
-            />
+            <PostList posts={posts} />
           ) : (
             <form action="/search" method="GET" className="search-header mb-50">
               <div className="input-group w-100">
