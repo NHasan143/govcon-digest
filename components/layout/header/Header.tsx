@@ -63,10 +63,10 @@ export default function Header({ variant = "default", showSearch = true, showSoc
                         <Image
                             src="/logo.png"
                             alt={`${SITE.name} logo`}
-                            width={141}
-                            height={90}
+                            width={171}
+                            height={64}
                             priority
-                            style={{ objectFit: "contain", height: 90, width: "auto" }}
+                            style={{ height: 64, width: "auto" }}
                         />
                     </Link>
                     <div className="masthead-side d-none d-lg-flex align-items-center justify-content-end">

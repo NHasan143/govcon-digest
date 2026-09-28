@@ -2,7 +2,7 @@
 import type { Metadata } from 'next'
 import { getPayload } from 'payload'
 import config from '@payload-config'
-import { newsUrl, PostList } from '@/components/cms/PostList'
+import { PostList } from '@/components/cms/PostList'
 import { SITE } from '@/lib/config'
 
 // Render per-request so newly published news appears immediately
@@ -34,7 +34,7 @@ export default async function StoriesPage() {
             <div className="entry-header mb-30">
                 <h1 className="entry-title font-weight-900 mb-10">News</h1>
             </div>
-            <PostList posts={docs} hrefFor={(doc) => newsUrl(doc)} />
+            <PostList posts={docs} />
         </div>
     )
 }

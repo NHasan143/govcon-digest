@@ -186,6 +186,9 @@ export interface Post {
      */
     customSchema?: string | null;
   };
+  /**
+   * The article URL is /{slug}. Must be unique across Posts and News.
+   */
   slug: string;
   author: number | User;
   publishedAt?: string | null;
@@ -371,6 +374,9 @@ export interface News {
      */
     customSchema?: string | null;
   };
+  /**
+   * The article URL is /{slug}. Must be unique across Posts and News.
+   */
   slug: string;
   author: number | User;
   publishedAt?: string | null;

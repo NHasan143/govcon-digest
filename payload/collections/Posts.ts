@@ -1,5 +1,5 @@
 import { APIError, type CollectionConfig, type Where } from 'payload'
-import { formatSlug } from '../utils/formatSlug'
+import { articleSlugField } from '../fields/articleSlug'
 import { customSchemaField } from '../fields/customSchema'
 import { CATEGORY_OPTIONS } from '../../lib/categories'
 
@@ -72,7 +72,7 @@ export const Posts: CollectionConfig = {
             required: true,
         },
         {
-            // Determines the article's canonical URL: /{category}/{slug}/
+            // Filing only — the URL is /{slug}, so re-categorising never moves a post
             name: 'category',
             type: 'select',
             required: true,
@@ -98,18 +98,7 @@ export const Posts: CollectionConfig = {
                 customSchemaField,
             ],
         },
-        {
-            name: 'slug',
-            type: 'text',
-            required: true,
-            unique: true,
-            admin: {
-                position: 'sidebar',
-            },
-            hooks: {
-                beforeValidate: [formatSlug('title')],
-            },
-        },
+        articleSlugField,
         {
             name: 'author',
             type: 'relationship',

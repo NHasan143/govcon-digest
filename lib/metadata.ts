@@ -30,7 +30,7 @@ export function generateStructuredData(type: 'article' | 'author' | 'organizatio
                 dateModified: data.updatedAt || data.publishedAt,
                 mainEntityOfPage: {
                     '@type': 'WebPage',
-                    '@id': `${baseUrl}/single/${data.slug}`,
+                    '@id': `${baseUrl}/${data.slug}`,
                 },
                 articleSection: data.category.name,
                 keywords: data.tags?.map((tag: any) => tag.name).join(', ') || '',

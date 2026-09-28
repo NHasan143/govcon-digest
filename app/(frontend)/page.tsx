@@ -15,7 +15,7 @@ import { styles } from "@/components/home/primitives";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Government Contracting, Defense & Federal Technology News",
+  title: `${SITE.name} | Government Contracting, Defense & Federal Technology News`,
   description:
     "Govcon Digest covers the business of government: contract awards, federal procurement, defense programs, artificial intelligence, cybersecurity, federal technology, financial news and executive moves.",
   keywords: [

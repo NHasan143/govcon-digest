@@ -1,5 +1,6 @@
 /* Bridges Payload CMS posts into the template's `Article` prop shape so the
    existing section components can render CMS content unchanged. */
+import { cache } from 'react'
 import { getPayload, type Where } from 'payload'
 import config from '@payload-config'
 import { normalisePath } from '@/payload/collections/Redirects'
@@ -22,6 +23,39 @@ export const mediaUrl = (url?: string | null): string | undefined => {
     }
     return url
 }
+
+// Every article — Post or News — lives at /{slug}. Slugs are unique across
+// both collections (payload/fields/articleSlug.ts), so the slug alone is the URL.
+export const articleUrl = (doc: { slug: string }) => `/${doc.slug}`
+
+/* One published article by slug, from either collection (Posts first). Wrapped
+   in cache() so generateMetadata and the page share a single lookup. */
+export const getArticleBySlug = cache(
+    async (
+        slug: string,
+    ): Promise<{ collection: 'posts'; doc: Post } | { collection: 'news'; doc: NewsDoc } | null> => {
+        try {
+            const payload = await getPayload({ config })
+            for (const collection of ['posts', 'news'] as const) {
+                const { docs } = await payload.find({
+                    collection,
+                    where: { slug: { equals: slug } },
+                    limit: 1,
+                    depth: 2,
+                    overrideAccess: false, // published, not hidden
+                })
+                if (docs[0]) {
+                    return collection === 'posts'
+                        ? { collection, doc: docs[0] as Post }
+                        : { collection, doc: docs[0] as NewsDoc }
+                }
+            }
+        } catch {
+            // fall through to null
+        }
+        return null
+    },
+)
 
 export async function getHomepagePosts(limit = 40): Promise<Post[]> {
     try {
@@ -65,7 +99,7 @@ export async function getSectionPosts(
     }
 }
 
-// Published news for the homepage sections (rendered at /stories/{slug})
+// Published news for the homepage sections (rendered at /{slug})
 export async function getHomepageNews(limit = 40): Promise<NewsDoc[]> {
     try {
         const payload = await getPayload({ config })
@@ -82,8 +116,8 @@ export async function getHomepageNews(limit = 40): Promise<NewsDoc[]> {
     }
 }
 
-// A search result is a blog post or a news doc; `isNews` decides the URL
-export type SearchHit = (Post | NewsDoc) & { isNews?: boolean }
+// A search result is a blog post or a news doc (both live at /{slug})
+export type SearchHit = Post | NewsDoc
 
 // Full-text-ish search over published posts AND news (title, excerpt, tags)
 export async function searchPosts(query: string, limit = 50): Promise<SearchHit[]> {
@@ -114,7 +148,7 @@ export async function searchPosts(query: string, limit = 50): Promise<SearchHit[
         ])
         const hits: SearchHit[] = [
             ...postsRes.docs,
-            ...newsRes.docs.map((d) => ({ ...d, isNews: true })),
+            ...newsRes.docs,
         ]
         return hits
             .sort(
@@ -165,12 +199,9 @@ export async function getFeaturedPosts(limit = 4): Promise<Post[]> {
     }
 }
 
-// News docs share every field postToArticle touches; only the URL differs
+// News docs share every field postToArticle touches, URL included
 export function newsToArticle(doc: NewsDoc): Article {
-    return {
-        ...postToArticle(doc as unknown as Post),
-        slug: `/stories/${doc.slug}`,
-    }
+    return postToArticle(doc as unknown as Post)
 }
 
 export function postToArticle(post: Post): Article {
@@ -183,7 +214,7 @@ export function postToArticle(post: Post): Article {
         title: post.title,
         content: post.excerpt || '',
         excerpt: post.excerpt || '',
-        slug: `/${post.category}/${post.slug}`,
+        slug: articleUrl(post),
         publishedAt: post.publishedAt || post.createdAt,
         featuredImage: mediaUrl(media?.url),
         thumbnailImage: mediaUrl(media?.sizes?.thumbnail?.url) || mediaUrl(media?.url),

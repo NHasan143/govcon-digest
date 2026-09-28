@@ -3,26 +3,14 @@
 import Link from 'next/link'
 import type { News, Post } from '@/payload-types'
 import { getCategory } from '@/lib/categories'
-import { mediaUrl } from '@/lib/cms'
+import { articleUrl, mediaUrl } from '@/lib/cms'
 
 const mediaDoc = (value: unknown): { url?: string; alt?: string } | null =>
     value && typeof value === 'object' ? (value as { url?: string; alt?: string }) : null
 
-export const postUrl = (post: Pick<Post, 'category' | 'slug'>) =>
-    `/${post.category}/${post.slug}`
-
-// News articles live at /stories/{slug} — category is metadata, not the path
-export const newsUrl = (doc: Pick<News, 'slug'>) => `/stories/${doc.slug}`
-
 type ListDoc = Post | News
 
-export function PostList({
-    posts,
-    hrefFor = postUrl,
-}: {
-    posts: ListDoc[]
-    hrefFor?: (doc: ListDoc) => string
-}) {
+export function PostList({ posts }: { posts: ListDoc[] }) {
     if (posts.length === 0) {
         return (
             <div className="text-center pt-50 pb-50">
@@ -58,7 +46,7 @@ export function PostList({
                                         className="post-thumb d-flex mr-15 border-radius-5 img-hover-scale"
                                         style={{ flex: '0 0 220px', width: 220 }}
                                     >
-                                        <Link href={hrefFor(post)} style={{ width: '100%' }}>
+                                        <Link href={articleUrl(post)} style={{ width: '100%' }}>
                                             {/* eslint-disable-next-line @next/next/no-img-element */}
                                             <img
                                                 src={mediaUrl(cover.url)}
@@ -86,7 +74,7 @@ export function PostList({
                                         </div>
                                     )}
                                     <h5 className="post-title mb-10">
-                                        <Link href={hrefFor(post)}>{post.title}</Link>
+                                        <Link href={articleUrl(post)}>{post.title}</Link>
                                     </h5>
                                     {post.excerpt && (
                                         <p className="post-exerpt font-medium text-muted mb-10">
