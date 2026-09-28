@@ -206,7 +206,7 @@
   border-right: 1px solid var(--rule);
 }
 
-/* Left column: two stacked articles, divided. */
+/* Left column: two stacked section articles, divided. */
 .heroSide {
   display: grid;
   gap: 20px;
@@ -436,8 +436,8 @@
 }
 
 @media (max-width: 991px) {
-  /* Hero unstacks: lead story full width, then the two side stories as a
-     pair, then the LATEST rail. */
+  /* Hero unstacks: lead story full width, then two section stories in a
+     row, then the LATEST rail. */
   .hero {
     grid-template-columns: minmax(0, 1fr);
     gap: 30px;

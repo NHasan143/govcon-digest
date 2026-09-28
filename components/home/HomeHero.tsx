@@ -1,13 +1,13 @@
 /* Homepage hero band.
  *
  *   ┌────────┬──────────────────────┬──────────┐
- *   │ side 1 │                      │  LATEST  │
- *   ├────────┤     lead story       │  1..5    │
- *   │ side 2 │                      │          │
+ *   │ GovCon │                      │  LATEST  │
+ *   ├────────┤     lead story       │          │
+ *   │Defense │                      │  1..6    │
  *   └────────┴──────────────────────┴──────────┘
  *
- * `lead` + `side` are the three featured slots; `latest` is the rail of five
- * recent stories on the right.
+ * `side` holds the latest story from each of the two selected sections;
+ * `lead` is the featured story, and `latest` holds six recent stories.
  */
 import type { Article } from '@/types'
 import { DateLine, Excerpt, Headline, Kicker, SectionHead, Thumb, styles } from './primitives'
@@ -23,11 +23,11 @@ export default function HomeHero({
 }) {
     return (
         <section className={styles.hero} aria-label="Top stories">
-            {/* Left — two stacked stories */}
+            {/* Left — latest GovCon and Defense stories */}
             <div className={styles.heroSide}>
                 {side.map((article) => (
                     <article key={article.id} className={styles.heroSideItem}>
-                        <Thumb article={article} ratio="ratio43" sizes="(max-width: 991px) 45vw, 200px" />
+                        <Thumb article={article} ratio="ratio43" sizes="(max-width: 575px) 100vw, (max-width: 991px) 45vw, 200px" />
                         <Kicker article={article} />
                         <Headline article={article} clamp={3} as="h3" />
                         <DateLine article={article} />
@@ -64,4 +64,3 @@ export default function HomeHero({
         </section>
     )
 }
-
