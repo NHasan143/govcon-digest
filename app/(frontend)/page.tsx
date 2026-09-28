@@ -8,7 +8,7 @@ import {
   postToArticle,
 } from "@/lib/cms";
 import HomeHero from "@/components/home/HomeHero";
-import { CardRow, EditorsPicks, FeatureRail } from "@/components/home/Rails";
+import { CardRow, EditorsPicks } from "@/components/home/Rails";
 import { styles } from "@/components/home/primitives";
 
 // Render per-request so newly published CMS posts appear immediately
@@ -64,7 +64,7 @@ const HERO_SECTIONS = ["government-contracting", "defense"];
 const HERO_LATEST = 6; //  right-hand LATEST rail
 const HIGHLIGHTS = 5; //  Today's Highlights
 const EDITORS = 5; //  Editor's Picked
-const SECTION_POSTS = 5; //  each of the seven section rails
+const SECTION_POSTS = 4; //  each of the seven section rails (four across)
 
 export default async function Home() {
   /* The left column shows the newest story from each requested section.
@@ -107,13 +107,21 @@ export default async function Home() {
 
   /* Section rails. Each queries its own family (the section plus its three
      subsections) so a rail is filled from that desk's coverage rather than
-     from whatever happens to be newest site-wide. Run in parallel; posts
-     already placed above are excluded so nothing appears twice. */
+     from whatever happens to be newest site-wide. Run in parallel. Posts not
+     yet on the page come first; if the desk has too few of those, the rail is
+     topped up with its own posts already shown above, so a rail is never left
+     with an empty slot while the section has stories to fill it. Families
+     don't overlap, so no post repeats between rails. */
   const sectionRails = await Promise.all(
-    PARENT_CATEGORIES.map(async (section) => ({
-      section,
-      posts: await getSectionPosts(getCategoryFamily(section.slug), SECTION_POSTS, used),
-    })),
+    PARENT_CATEGORIES.map(async (section) => {
+      const pool = await getSectionPosts(
+        getCategoryFamily(section.slug),
+        SECTION_POSTS + used.size,
+      );
+      const fresh = pool.filter((p) => !used.has(p.id));
+      const shown = pool.filter((p) => used.has(p.id));
+      return { section, posts: [...fresh, ...shown].slice(0, SECTION_POSTS) };
+    }),
   );
 
   return (
@@ -133,26 +141,20 @@ export default async function Home() {
 
       <EditorsPicks title="Editor's Picked" articles={editors.map(postToArticle)} />
 
-      {/* One rail per section, in registry order. A rail with nothing to show
-          is skipped rather than rendered empty. Layout alternates between the
-          four-across row and the feature grid to break up the page. */}
-      {sectionRails.map(({ section, posts }, index) => {
-        if (posts.length === 0) return null;
-        const articles = posts.map(postToArticle);
-        const props = {
-          title: section.name,
-          href: `/${section.slug}`,
-          accent: section.color,
-          articles,
-        };
-        // Every third rail gets the feature treatment, and only when it has
-        // the full five posts that layout is designed around.
-        return index % 3 === 2 && articles.length === SECTION_POSTS ? (
-          <FeatureRail key={section.slug} {...props} />
-        ) : (
-          <CardRow key={section.slug} {...props} articles={articles.slice(0, 4)} />
-        );
-      })}
+      {/* One rail per section, in registry order, every one the same
+          four-across row. A rail with nothing to show is skipped rather than
+          rendered empty. */}
+      {sectionRails.map(({ section, posts }) =>
+        posts.length === 0 ? null : (
+          <CardRow
+            key={section.slug}
+            title={section.name}
+            href={`/${section.slug}`}
+            accent={section.color}
+            articles={posts.map(postToArticle)}
+          />
+        ),
+      )}
     </div>
   );
 }

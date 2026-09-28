@@ -322,46 +322,6 @@
   margin-bottom: 8px;
 }
 
-/* --------------------------------------------------- feature + satellite grid */
-
-.feature {
-  display: grid;
-  grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr);
-  gap: 34px;
-  align-items: start;
-}
-
-.featureMain .thumb { margin-bottom: 16px; }
-
-.featureMain .headline {
-  font-size: 27px;
-  line-height: 1.2;
-  margin-bottom: 10px;
-}
-
-.featureMain .excerpt {
-  font-size: 14px;
-  line-height: 1.6;
-}
-
-.featureGrid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 24px var(--gap);
-}
-
-.featureGrid .headline {
-  font-size: 15px;
-  line-height: 1.28;
-  min-height: 3.84em; /* 3 lines */
-}
-
-.featureGrid .excerpt {
-  font-size: 12.5px;
-  line-height: 1.5;
-  min-height: 3em; /* 2 lines */
-}
-
 /* --------------------------------------------------------- editors' picks */
 
 /* One lead story beside a numbered list of four. */
@@ -468,13 +428,10 @@
 
   .cardRow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 
-  .feature,
   .picks {
     grid-template-columns: minmax(0, 1fr);
     gap: 28px;
   }
-
-  .featureMain .headline { font-size: 24px; }
 }
 
 @media (max-width: 575px) {
@@ -489,7 +446,11 @@
 
   .cardRow { grid-template-columns: minmax(0, 1fr); }
 
-  .featureGrid { grid-template-columns: minmax(0, 1fr); }
+  /* Stacked one per row there is no neighbour to share a baseline with, so
+     reserving three lines would only leave a gap above the date. */
+  .card .kicker,
+  .card .headline,
+  .card .excerpt { min-height: 0; }
 
   .picksItem { grid-template-columns: 22px minmax(0, 1fr) 76px; }
 
