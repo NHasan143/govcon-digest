@@ -1,10 +1,10 @@
-/* The three repeating homepage block layouts.
+/* The two repeating homepage block layouts.
  *
- *   CardRow      — N equal cards side by side (reference layout's BUSINESS row)
- *   FeatureRail  — one large story beside a 2×2 grid of four (its POLITICS block)
+ *   CardRow      — N equal cards side by side (Today's Highlights and every
+ *                  section rail)
  *   EditorsPicks — one large story beside a numbered list of four
  *
- * All three take a pre-sliced list and render exactly what they are given, so
+ * Both take a pre-sliced list and render exactly what they are given, so
  * the page decides how many posts a block gets, not the block.
  */
 import type { Article } from '@/types'
@@ -51,65 +51,6 @@ export function CardRow({
                         {showExcerpt && <Excerpt article={article} clamp={3} />}
                     </article>
                 ))}
-            </div>
-        </section>
-    )
-}
-
-/* -------------------------------------------------------------- FeatureRail */
-
-export function FeatureRail({
-    title,
-    href,
-    accent,
-    articles,
-}: {
-    title: string
-    href?: string
-    accent?: string
-    articles: Article[]
-}) {
-    if (articles.length === 0) return null
-
-    const [lead, ...rest] = articles
-    const satellites = rest.slice(0, 4)
-
-    return (
-        <section className={styles.block}>
-            <SectionHead title={title} href={href} accent={accent} />
-            <div className={styles.feature}>
-                <article className={styles.featureMain}>
-                    {/* 4:3 rather than 3:2 — the satellite grid beside it is two
-                        card-rows tall, and the shorter crop left the column
-                        ending well above it. */}
-                    <Thumb
-                        article={lead}
-                        ratio="ratio43"
-                        sizes="(max-width: 991px) 100vw, 660px"
-                    />
-                    <Kicker article={lead} />
-                    <Headline article={lead} clamp={3} as="h3" />
-                    <Excerpt article={lead} clamp={3} />
-                    <Byline article={lead} />
-                </article>
-
-                {satellites.length > 0 && (
-                    <div className={styles.featureGrid}>
-                        {satellites.map((article) => (
-                            <article key={article.id} className={styles.card}>
-                                <Thumb
-                                    article={article}
-                                    ratio="ratio43"
-                                    sizes="(max-width: 575px) 100vw, (max-width: 991px) 45vw, 250px"
-                                />
-                                <Kicker article={article} />
-                                <Headline article={article} clamp={3} as="h4" />
-                                <Excerpt article={article} clamp={2} />
-                                <DateLine article={article} />
-                            </article>
-                        ))}
-                    </div>
-                )}
             </div>
         </section>
     )
