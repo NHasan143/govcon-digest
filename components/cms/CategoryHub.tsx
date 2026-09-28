@@ -4,7 +4,7 @@ import config from '@payload-config'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { maybeRedirect } from '@/lib/redirect-guard'
-import { getCategory, getCategoryFamily, getParentCategory } from '@/lib/categories'
+import { getCategory, getCategoryFamily } from '@/lib/categories'
 import { PostList } from '@/components/cms/PostList'
 
 export const POSTS_PER_PAGE = 12
@@ -47,8 +47,6 @@ export async function CategoryHub({
         notFound()
     }
 
-    const section = getParentCategory(categorySlug)
-
     const result = await getCategoryPosts(categorySlug, page)
     // Page numbers beyond the last page 404 rather than rendering empty shells
     if (!result || (page > 1 && page > (result.totalPages || 1))) {
@@ -60,19 +58,9 @@ export async function CategoryHub({
 
     return (
         <div className="pt-30 pb-50">
-            <div className="entry-header mb-30" style={{ borderTop: `3px solid ${category.color}`, paddingTop: 16 }}>
+            <div className="entry-header mb-30" style={{ paddingTop: 16 }}>
                 <h1 className="entry-title font-weight-900 mb-10">{category.name}</h1>
                 <p className="text-muted mb-15">{category.blurb}</p>
-                {/* Subsection rail — only on a section hub */}
-                {section && (
-                    <nav className="font-small text-uppercase" aria-label={`${category.name} subsections`}>
-                        {section.children.map((child) => (
-                            <Link key={child.slug} href={`/${child.slug}`} className="mr-20 d-inline-block mb-5">
-                                {child.name}
-                            </Link>
-                        ))}
-                    </nav>
-                )}
             </div>
             <PostList posts={result.docs} />
             {result.totalPages > 1 && (
