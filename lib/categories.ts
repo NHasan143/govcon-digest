@@ -57,7 +57,7 @@ export const CATEGORY_TREE: ParentCategory[] = [
     {
         slug: 'artificial-intelligence',
         name: 'Artificial Intelligence',
-        menuLabel: 'Artificial Intelligence',
+        menuLabel: 'AI',
         blurb: 'How federal agencies and their contractors are buying, building and governing AI.',
         color: '#5b3a8e',
         children: [

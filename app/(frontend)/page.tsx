@@ -2,7 +2,6 @@ import { Metadata } from "next";
 import { SITE } from "@/lib/config";
 import { PARENT_CATEGORIES, getCategoryFamily } from "@/lib/categories";
 import {
-  getFeaturedPosts,
   getHomepagePosts,
   getSectionPosts,
   getSliderFeaturedPosts,
@@ -61,20 +60,21 @@ export const metadata: Metadata = {
 
 /* Homepage slot budget — the page allocates from newest-first pools and each
    block takes exactly this many posts. */
-const HERO_SIDE = 2; //  left column, stacked
-const HERO_LATEST = 5; //  right-hand LATEST rail
+const HERO_SECTIONS = ["government-contracting", "defense"];
+const HERO_LATEST = 6; //  right-hand LATEST rail
 const HIGHLIGHTS = 5; //  Today's Highlights
 const EDITORS = 5; //  Editor's Picked
 const SECTION_POSTS = 5; //  each of the seven section rails
 
 export default async function Home() {
-  /* The hero's three featured slots stay editor-controlled: "Slider featured"
-     supplies the lead story, "Featured" the two beside it. Anything an editor
-     leaves unticked is filled from the newest posts, so the band is never
-     ragged. Everything below the hero is purely chronological. */
-  const [sliderPosts, featuredPosts, latestPosts] = await Promise.all([
+  /* The left column shows the newest story from each requested section.
+     "Slider featured" still supplies the centre lead; the right rail shows
+     the six newest published posts, even when also featured in the hero. */
+  const [sliderPosts, sectionPosts, latestPosts] = await Promise.all([
     getSliderFeaturedPosts(),
-    getFeaturedPosts(),
+    Promise.all(
+      HERO_SECTIONS.map((slug) => getSectionPosts(getCategoryFamily(slug), 1)),
+    ),
     getHomepagePosts(60),
   ]);
 
@@ -85,13 +85,12 @@ export default async function Home() {
     return picked;
   };
 
-  // Hero: editor picks first, then newest-first filler for any empty slot.
+  // Keep the centre lead editor-controlled and each side selection current.
   const lead = take(sliderPosts, 1)[0] ?? take(latestPosts, 1)[0];
-  const side = [...take(featuredPosts, HERO_SIDE), ...take(latestPosts, HERO_SIDE)].slice(
-    0,
-    HERO_SIDE,
-  );
-  const latest = take(latestPosts, HERO_LATEST);
+  const side = sectionPosts.flat();
+  side.forEach((post) => used.add(post.id));
+  const latest = latestPosts.slice(0, HERO_LATEST);
+  latest.forEach((post) => used.add(post.id));
 
   // Nothing published yet — show the empty state rather than a broken grid.
   if (!lead) {
