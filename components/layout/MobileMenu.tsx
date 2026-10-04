@@ -1,12 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useRef, useState, type CSSProperties } from "react";
 import { PARENT_CATEGORIES } from "@/lib/categories";
+import styles from "./MobileMenu.module.css";
 
 type MenuItem = {
   label: string;
   href?: string;
+  color?: string;
   submenu?: { label: string; href: string }[];
 };
 
@@ -18,6 +20,7 @@ const menuItems: MenuItem[] = [
   ...PARENT_CATEGORIES.map((category) => ({
     label: category.menuLabel ?? category.name,
     href: `/${category.slug}`,
+    color: category.color,
     submenu: [
       { label: `All ${category.name}`, href: `/${category.slug}` },
       ...category.children.map((child) => ({
@@ -31,78 +34,46 @@ const menuItems: MenuItem[] = [
 
 export default function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false);
-  const [openSubmenus, setOpenSubmenus] = useState<string[]>([]);
-
-  const toggleMenu = () => setIsOpen(!isOpen);
-
-  const toggleSubmenu = (label: string) => {
-    setOpenSubmenus((prev) => (prev.includes(label) ? prev.filter((l) => l !== label) : [...prev, label]));
-  };
+  const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
+  const trigger = useRef<HTMLButtonElement>(null);
+  const close = () => { setIsOpen(false); setOpenSubmenu(null); };
 
   return (
-    <div className="mobile_menu d-lg-none">
-      <div className="slicknav_menu">
-        <div className={`container ${isOpen ? "slicknav_collapsed" : "slicknav_open"}`}>
-          <button onClick={toggleMenu} className="slicknav_btn slicknav_collapsed" aria-expanded={isOpen} aria-label="Toggle navigation">
-            <span className="slicknav_menutxt">MENU</span>
-            <span className="slicknav_icon">
-              {isOpen ? (
-                <>
-                  <i className="ti-close mr-5"></i>
-                </>
-              ) : (
-                <>
-                  <i className="ti-view-grid font-small mr-5"></i>
-                  <span className="menu-text">Menu</span>
-                </>
-              )}
-            </span>
-          </button>
-        </div>
-
-        {isOpen && (
-          <ul className="slicknav_nav">
-            {menuItems.map((item) => (
-              <li key={item.label} className={`slicknav_parent ${openSubmenus.includes(item.label) ? "slicknav_open" : "slicknav_collapsed"}`}>
-                {item.submenu ? (
-                  <>
-                    {/* The label navigates to the section hub; the +/- control
-                        expands the subsections without leaving the page. */}
-                    <span className="slicknav_item slicknav_row d-flex align-items-center justify-content-between">
-                      <Link href={item.href ?? "#"} onClick={() => setIsOpen(false)}>
-                        {item.label}
-                      </Link>
-                      <button
-                        type="button"
-                        onClick={() => toggleSubmenu(item.label)}
-                        aria-expanded={openSubmenus.includes(item.label)}
-                        aria-label={`Toggle ${item.label} subsections`}
-                        className="slicknav_arrow border-0 bg-transparent"
-                      >
-                        {openSubmenus.includes(item.label) ? "−" : "+"}
-                      </button>
-                    </span>
-                    {openSubmenus.includes(item.label) && (
-                      <ul className="sub-menu text-muted font-small">
-                        {item.submenu.map((sub) => (
-                          <li key={sub.href} className="py-1">
-                            <Link href={sub.href} onClick={() => setIsOpen(false)}>
-                              {sub.label}
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </>
-                ) : (
-                  <Link href={item.href ?? "#"} onClick={() => setIsOpen(false)}>
-                    {item.label}
-                  </Link>
-                )}
-              </li>
-            ))}
+    <div className={`d-lg-none ${styles.mobile}`} onKeyDown={(event) => {
+      if (event.key === "Escape" && isOpen) { event.preventDefault(); close(); trigger.current?.focus(); }
+    }}>
+      <div className="container">
+        <button ref={trigger} type="button" onClick={() => { if (isOpen) close(); else setIsOpen(true); }}
+          className={styles.menuButton} aria-expanded={isOpen} aria-controls="mobile-sections">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d={isOpen ? "M6 6l12 12M6 18 18 6" : "M4 6h16M4 12h16M4 18h16"} stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+          </svg>
+          {isOpen ? "Close menu" : "Sections"}
+        </button>
+        <nav id="mobile-sections" aria-label="Mobile navigation" hidden={!isOpen} className={styles.panel}>
+          <ul className={styles.list}>
+            {menuItems.map((item) => {
+              const expanded = openSubmenu === item.label;
+              const id = `mobile${item.href?.replaceAll("/", "-")}`;
+              return (
+                <li key={item.label} style={{ "--section-color": item.color ?? "var(--text-primary)" } as CSSProperties}>
+                  <div className={styles.row}>
+                    <Link href={item.href ?? "#"} onClick={close}>{item.label}</Link>
+                    {item.submenu && <button type="button" onClick={() => setOpenSubmenu(expanded ? null : item.label)}
+                      aria-expanded={expanded} aria-controls={id} aria-label={`${expanded ? "Close" : "Open"} ${item.label} topics`}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d={expanded ? "M5 12h14" : "M5 12h14M12 5v14"} stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                      </svg>
+                    </button>}
+                  </div>
+                  {item.submenu && <ul id={id} className={styles.submenu} hidden={!expanded}>
+                    {item.submenu.map((sub) => <li key={sub.href}><Link href={sub.href} onClick={close}>{sub.label}</Link></li>)}
+                  </ul>}
+                </li>
+              );
+            })}
           </ul>
-        )}
+        </nav>
       </div>
     </div>
   );

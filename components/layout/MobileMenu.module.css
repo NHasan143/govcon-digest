@@ -1,0 +1,28 @@
+.mobile { color: var(--text-primary); background: var(--bg-primary); }
+.menuButton {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 52px;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    color: inherit;
+    font-family: var(--lora), serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.panel { max-height: 70dvh; overflow-y: auto; overscroll-behavior: contain; scrollbar-color: var(--border-color) var(--bg-primary); }
+.panel[hidden], .submenu[hidden] { display: none; }
+.list, .submenu { list-style: none; margin: 0; padding: 0; }
+.list > li { border-top: 1px solid var(--border-color); list-style: none; padding: 0; }
+.row { display: flex; align-items: center; justify-content: space-between; }
+.row a { flex: 1; padding: 14px 0; font-family: var(--eb-garamond), serif; font-size: 22px; font-weight: 600; line-height: 1.2; color: inherit; }
+.row button { display: grid; place-items: center; min-width: 48px; min-height: 48px; border: 0; background: transparent; color: inherit; cursor: pointer; }
+.submenu { padding: 0 14px 12px; background: color-mix(in srgb, var(--section-color) 5%, var(--bg-primary)); }
+.submenu li { list-style: none; padding: 0; }
+.submenu a { display: block; padding: 12px 0; font-family: var(--lora), serif; font-size: 13px; line-height: 1.5; color: var(--text-primary); }
+.mobile a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.mobile a:focus-visible, .mobile button:focus-visible { outline: 2px solid currentColor; outline-offset: -2px; }
+.mobile ::selection { background: var(--text-primary); color: var(--bg-primary); }

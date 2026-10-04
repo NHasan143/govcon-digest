@@ -3,6 +3,7 @@ import Image from "next/image";
 import { FooterProps } from "@/types";
 import { SITE } from "@/lib/config";
 import { PARENT_CATEGORIES } from "@/lib/categories";
+import styles from "./Footer.module.css";
 
 const companyLinks = [
   { label: "Home", href: "/" },
@@ -67,7 +68,7 @@ export default function Footer({
               <div className="col-12">
                 <div className="divider-2 mb-30" />
               </div>
-              <div className="col-lg-4 col-md-6 mb-lg-0 mb-md-4 mb-sm-4">
+              <div className="col-12 col-lg-4 mb-4 mb-lg-0">
                 <div className="sidebar-widget widget-latest-posts pr-30">
                   <div className="mb-15">
                     <Link href="/" className="d-inline-block">
@@ -105,9 +106,9 @@ export default function Footer({
                   </div>
                 </div>
               </div>
-              <div className="col-lg-4 col-md-6 mb-lg-0 mb-md-4 mb-sm-4">
+              <div className="col-6 col-lg-4">
                 <h5 className="mb-15">Category</h5>
-                <ul className="float-start mr-30 font-small">
+                <ul className="list-unstyled font-small">
                   {PARENT_CATEGORIES.map((category) => (
                     <li key={category.slug} className="cat-item">
                       <Link href={`/${category.slug}`}>{category.name}</Link>
@@ -115,9 +116,9 @@ export default function Footer({
                   ))}
                 </ul>
               </div>
-              <div className="col-lg-4 col-md-6 mb-lg-0 mb-md-4 mb-sm-4">
+              <div className="col-6 col-lg-4">
                 <h5 className="mb-15">Company</h5>
-                <ul className="float-start mr-30 font-small">
+                <ul className="list-unstyled font-small">
                   {companyLinks.map((link) => (
                     <li key={link.href} className="cat-item">
                       <Link href={link.href}>{link.label}</Link>
@@ -131,25 +132,17 @@ export default function Footer({
         {/* footer-bottom aera */}
         <div className="footer-bottom-area text-center text-muted">
           <div className="container">
-            <div className="footer-border pt-20 pb-20">
-              <div className="row d-flex mb-10">
-                <div className="col-12">
-                  <ul className="list-inline font-small">
-                    {legalLinks.map((link) => (
-                      <li key={link.href} className="list-inline-item mr-15">
-                        <Link href={link.href}>{link.label}</Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-              <div className="row d-flex align-items-center justify-content-between">
-                <div className="col-12">
-                  <div className="footer-copy-right">
-                    <p className="font-small text-muted">{copyright}</p>
-                  </div>
-                </div>
-              </div>
+            <div className={`footer-border pt-20 pb-20 ${styles.bottom}`}>
+              <p className={`font-small text-muted ${styles.copyright}`}>{copyright}</p>
+              <nav aria-label="Footer policies">
+                <ul className={`font-small ${styles.policies}`}>
+                  {legalLinks.map((link) => (
+                    <li key={link.href}>
+                      <Link href={link.href}>{link.label}</Link>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
             </div>
           </div>
         </div>
