@@ -40,6 +40,15 @@ export default buildConfig({
 
     admin: {
         user: Users.slug,
+        components: {
+            graphics: {
+                Logo: '/components/cms/EditorialBrand#EditorialBrand',
+                Icon: '/components/cms/EditorialBrand#EditorialIcon',
+            },
+            views: {
+                dashboard: { Component: '/payload/components/EditorialDashboard#EditorialDashboard' },
+            },
+        },
         importMap: {
             baseDir: path.resolve(dirname),
         },

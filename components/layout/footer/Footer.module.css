@@ -1,0 +1,32 @@
+.bottom {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.copyright { margin: 0; }
+
+.policies {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.policies li { margin: 0; }
+.policies a { white-space: nowrap; }
+
+@media (min-width: 992px) {
+    .bottom {
+        flex-direction: row;
+        justify-content: space-between;
+        text-align: left;
+        gap: 24px;
+    }
+    .copyright { white-space: nowrap; }
+    .policies { flex-wrap: nowrap; }
+}

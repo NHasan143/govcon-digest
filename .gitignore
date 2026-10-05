@@ -144,6 +144,9 @@ desktop.ini
 # Vendor template documentation (static HTML docs from the purchased theme, not part of the app)
 /documentation/
 
+# Local design context, mockups, and review captures (not deployment assets)
+/.impeccable/
+
 # Payload CMS runtime data (SQLite database + uploaded media) — back these up in production
 /data/
 /media/

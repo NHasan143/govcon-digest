@@ -91,9 +91,9 @@ export default function Header({ variant = "default", showSearch = true, showSoc
             <header className={`${styles.header} main-header header-style-1 font-heading header-sticky ${scroll ? "sticky-bar" : ""}`}>
                 <MobileMenu />
                 <div className="container position-relative">
-                    {/* Centered menu; search + subscribe pinned to the right */}
+                    {/* Full-width navigation anchors the seven section panels. */}
                     <div className="main-nav d-none d-lg-block text-center">
-                        <nav className="text-uppercase d-inline-block">
+                        <nav aria-label="Main navigation">
                             <MainMenu />
                         </nav>
                     </div>
