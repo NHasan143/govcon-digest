@@ -1,11 +1,11 @@
 /* Import essential vendor CSS files */
-@import url('/assets/css/vendor/bootstrap.min.css');
-@import url('/assets/css/vendor/themify-icons.css');
+@import url('../../public/assets/css/vendor/bootstrap.min.css');
+@import url('../../public/assets/css/vendor/themify-icons.css');
 
 /* Import main CSS files */
-@import url('/assets/css/style.css');
-@import url('/assets/css/widgets.css');
-@import url('/assets/css/responsive.css');
+@import url('../../public/assets/css/style.css');
+@import url('../../public/assets/css/widgets.css');
+@import url('../../public/assets/css/responsive.css');
 
 /* CSS Variables for fonts */
 :root {

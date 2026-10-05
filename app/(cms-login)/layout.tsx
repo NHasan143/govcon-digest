@@ -1,7 +1,8 @@
 import type { Metadata } from 'next'
+import { SITE } from '@/lib/config'
 
 export const metadata: Metadata = {
-    title: 'Sign in',
+    title: `Sign in — ${SITE.name}`,
     robots: {
         index: false,
         follow: false,

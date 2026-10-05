@@ -10,6 +10,8 @@ web
 
 GovCon professionals choosing coverage areas across government contracting, defense, federal technology, and related business news. Confirmed by the user for the Topics redesign.
 
+Editors and administrators use the private CMS sign-in and dashboard to create, resume, and manage publication content. The user confirmed both surfaces are in scope for the CMS redesign.
+
 ## Product Purpose
 
 An editorial publication for browsing reporting by section and topic. The Topics directory helps readers choose a coverage area quickly.
