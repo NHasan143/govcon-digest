@@ -33,9 +33,9 @@ export default buildConfig({
 
     // Custom admin path — hides the CMS from bots probing /admin, /wp-admin.
     // NEVER mention this path in robots.txt. The physical route folder
-    // app/(payload)/dorbar must be renamed if this ever changes.
+    // app/(payload)/newsroom must be renamed if this ever changes.
     routes: {
-        admin: '/dorbar',
+        admin: '/newsroom',
     },
 
     admin: {
