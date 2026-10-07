@@ -286,7 +286,7 @@ export interface User {
     instagram?: string | null;
     website?: string | null;
   };
-  role: 'admin' | 'editor';
+  role: 'admin' | 'editor' | 'suspended';
   mfa?: {
     /**
      * Managed via `npm run mfa -- <email>` — see scripts/setup-mfa.ts

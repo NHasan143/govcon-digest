@@ -14,7 +14,7 @@ export const BulkVisibilityActions = () => {
     const { count, selected } = useSelection()
     const [busy, setBusy] = useState(false)
     // Rendered on both the Posts and News list views — target the collection
-    // whose list we're on (/dorbar/collections/<slug>)
+    // whose list we're on (/newsroom/collections/<slug>)
     const pathname = usePathname()
     const collectionSlug = pathname?.match(/\/collections\/([^/?]+)/)?.[1] ?? 'posts'
 

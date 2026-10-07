@@ -9,5 +9,5 @@ export function EditorialBrand({ showDetail = true }: { showDetail?: boolean } =
 }
 
 export function EditorialIcon() {
-    return <span className={`${editorialFont.variable} ${styles.brandIcon}`} aria-label={SITE.name}>{SITE.initials}</span>
+    return <span className={`${editorialFont.variable} ${styles.brandIcon}`} aria-label="GovCon Digest">GovCon Digest</span>
 }

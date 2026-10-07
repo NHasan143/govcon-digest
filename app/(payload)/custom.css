@@ -1,5 +1,74 @@
 /* Custom styles for the Payload admin panel. */
 
+/* The editorial wordmark replaces Payload's 18px home icon. */
+.app-header {
+  background: var(--theme-elevation-50);
+}
+
+.app-header .step-nav {
+  gap: 16px;
+  min-width: 0;
+}
+
+.app-header .step-nav__home {
+  display: flex;
+  align-items: center;
+  width: auto;
+  height: auto;
+  min-height: 44px;
+  flex-shrink: 0;
+}
+
+.app-header .step-nav__home span {
+  max-width: none;
+  overflow: visible;
+}
+
+.nav-toggler {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+}
+
+.nav-toggler .hamburger {
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border-radius: 4px;
+  box-shadow: none;
+  background: transparent;
+  --hamburger-size: 24px;
+}
+
+.nav-toggler .hamburger svg {
+  width: 24px;
+  height: 24px;
+}
+
+.nav-toggler:hover .hamburger {
+  background: var(--theme-elevation-100);
+  box-shadow: none;
+}
+
+.nav-toggler:focus-visible {
+  outline: 2px solid var(--theme-text);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.app-header .step-nav__home:focus-visible::after {
+  inset: 4px -4px;
+  border-radius: 4px;
+}
+
+@media (max-width: 767px) {
+  .app-header__mobile-nav-toggler { display: none; }
+  .app-header__content { padding-left: 68px; }
+  .app-header__wrapper { gap: 16px; }
+  .app-header .step-nav { gap: 10px; }
+  .app-header .step-nav__home { flex-shrink: 0; }
+}
+
 /* "Hidden" pill in the Posts list's Hidden column */
 .post-hidden-marker {
   display: inline-block;

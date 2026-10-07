@@ -29,7 +29,7 @@ export default function CmsLogin() {
                 body: JSON.stringify({ email: email.trim(), password }),
             })
             if (response.ok) {
-                window.location.href = '/dorbar'
+                window.location.href = '/newsroom'
                 redirecting = true
                 return
             }

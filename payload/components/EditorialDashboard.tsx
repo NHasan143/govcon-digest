@@ -5,7 +5,7 @@ import styles from '@/components/cms/EditorialWorkspace.module.css'
 import { getCategory } from '@/lib/categories'
 import { SITE } from '@/lib/config'
 
-const adminPath = '/dorbar'
+const adminPath = '/newsroom'
 const contentCollections = [{ slug: 'posts', label: 'Posts' }, { slug: 'news', label: 'News' }] as const
 
 async function getContent(req: PayloadRequest, collection: 'posts' | 'news') {
@@ -42,7 +42,7 @@ export async function EditorialDashboard({ initPageResult }: AdminViewServerProp
     return (
         <main className={`${editorialFont.variable} ${styles.workspace} ${styles.dashboard}`}>
             <header className={styles.deskHeader}>
-                <div><h1>Editorial desk.</h1><p>Welcome back{req.user.name ? `, ${req.user.name}` : ''}. Pick up a story or start the next one.</p></div>
+                <div><h1>Editorial desk.</h1><p>Welcome back! Let&apos;s pick up a story or start the next one.</p></div>
                 <div className={styles.actions}>
                     {readable.filter(({ slug }) => permissions.collections?.[slug]?.create).map(({ slug }) => <Link key={slug} href={`${adminPath}/collections/${slug}/create`} className={`${styles.button} ${slug === 'news' ? styles.secondaryButton : ''}`}>{slug === 'posts' ? 'Write a post' : 'Write news'}<Arrow /></Link>)}
                 </div>

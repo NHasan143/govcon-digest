@@ -17,7 +17,7 @@
 .workspace :is(a, button, input):focus-visible { outline: 2px solid var(--cms-blue); outline-offset: 4px; }
 .brand { display: inline-block; color: inherit; font-family: var(--cms-serif), Georgia, serif; font-size: 1.875rem; font-weight: 600; line-height: 1.05; letter-spacing: -.035em; }
 .brandDetail { display: block; margin-top: .625rem; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: .6875rem; font-weight: 500; letter-spacing: .045em; line-height: 1.4; }
-.brandIcon { display: inline-block; font-family: var(--cms-serif), Georgia, serif; font-size: .875rem; font-weight: 600; white-space: nowrap; }
+.brandIcon { display: inline-block; color: inherit; font-family: var(--cms-serif), Georgia, serif; font-size: 24px; font-weight: 600; line-height: 1.1; letter-spacing: -.025em; white-space: nowrap; }
 .login { box-sizing: border-box; min-height: 100svh; padding: 1.25rem 5vw; background: var(--cms-paper); display: flex; flex-direction: column; }
 .loginHeader { display: flex; justify-content: space-between; align-items: center; gap: 1.5rem; }
 .publicationLink { display: inline-flex; align-items: center; gap: .75rem; min-height: 44px; color: var(--cms-muted); font-size: .8125rem; text-decoration: none; }

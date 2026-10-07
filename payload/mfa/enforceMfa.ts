@@ -14,11 +14,15 @@ export const enforceMfa: CollectionBeforeLoginHook = async ({ req, user }) => {
         showHiddenFields: true,
     })
 
+    if (fullUser.role === 'suspended') {
+        throw new APIError('This account is suspended. Contact the administrator.', 403)
+    }
+
     const mfa = (fullUser as { mfa?: { enabled?: boolean; secret?: string } }).mfa
 
-    if (mfa?.enabled && mfa?.secret) {
+    if (mfa?.enabled) {
         const code = req.headers.get('x-authenticator-code')
-        if (!code || !verifyToken(code.trim(), mfa.secret)) {
+        if (!mfa.secret || !code || !verifyToken(code.trim(), mfa.secret)) {
             throw new APIError('Invalid authenticator code', 401)
         }
     }

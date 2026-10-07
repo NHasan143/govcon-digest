@@ -19,7 +19,7 @@ const RESERVED_SLUGS = new Set([
     'login', 'newsletter', 'privacy', 'search', 'signup', 'single', 'single-2',
     'single-3', 'stories', 'subscribe', 'terms', 'topic', 'topics', 'typography',
     // app/ root, the admin panel, the login gate and static assets
-    'api', 'actions', 'dorbar', 'cms-login', 'assets', 'media', 'page',
+    'api', 'actions', 'dorbar', 'newsroom', 'cms-login', 'assets', 'media', 'page',
 ])
 
 const ARTICLE_COLLECTIONS = ['posts', 'news'] as const
