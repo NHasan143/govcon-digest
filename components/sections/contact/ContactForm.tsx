@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { submitContactForm } from "@/app/actions/contact";
-import { ContactFormData } from "@/app/actions/contact";
+import styles from "./Contact.module.css";
 import { useFormReset } from "@/hooks/useFormReset";
 import { NoScript } from "@/components/elements/NoScriptFallback";
 import Recaptcha from "@/components/elements/Recaptcha";
@@ -74,77 +74,44 @@ export default function ContactForm({
     };
 
     return (
-        <div className={`contact-form-container ${fill ? "d-flex flex-column flex-grow-1" : ""} ${className}`}>
-            {/* Success/Error Message */}
-            {message && <div className={`alert ${message.type === "success" ? "alert-success" : "alert-danger"} mb-4`}>{message.text}</div>}
-
-            <form key={resetKey} id="contactForm" action={handleSubmit} className={`form-contact comment_form ${fill ? "d-flex flex-column flex-grow-1" : ""}`}>
-                <div className="row">
-                    <div className="col-sm-6">
-                        <div className="mb-3">
-                            <input className={`form-control ${errors.name ? "is-invalid" : ""}`} name="name" id="name" type="text" placeholder={formConfig.namePlaceholder} required disabled={isPending} />
-                            {errors.name && <div className="invalid-feedback">{errors.name}</div>}
-                        </div>
-                    </div>
-                    <div className="col-sm-6">
-                        <div className="mb-3">
-                            <input className={`form-control ${errors.email ? "is-invalid" : ""}`} name="email" id="email" type="email" placeholder={formConfig.emailPlaceholder} required disabled={isPending} />
-                            {errors.email && <div className="invalid-feedback">{errors.email}</div>}
-                        </div>
-                    </div>
-                    <div className="col-12">
-                        <div className="mb-3">
-                            <input className={`form-control ${errors.phone ? "is-invalid" : ""}`} name="phone" id="phone" type="tel" placeholder={formConfig.phonePlaceholder} disabled={isPending} />
-                            {errors.phone && <div className="invalid-feedback">{errors.phone}</div>}
-                        </div>
-                    </div>
-                    {!fill && (
-                        <div className="col-12">
-                            <div className="mb-3">
-                                <textarea className={`form-control w-100 ${errors.message ? "is-invalid" : ""}`} name="message" id="message" cols={30} rows={9} placeholder={formConfig.messagePlaceholder} required disabled={isPending} defaultValue="" />
-                                {errors.message && <div className="invalid-feedback">{errors.message}</div>}
-                            </div>
-                        </div>
-                    )}
+        <div className={`${styles.formContainer} ${fill ? styles.fill : ""} ${className}`}>
+            {message && (
+                <div className={styles.feedback} data-type={message.type} role={message.type === "error" ? "alert" : "status"}>
+                    {message.text}
                 </div>
-                {fill && (
-                    <div className="mb-3 flex-grow-1 d-flex flex-column">
-                        <textarea
-                            className={`form-control w-100 flex-grow-1 ${errors.message ? "is-invalid" : ""}`}
-                            name="message"
-                            id="message"
-                            cols={30}
-                            rows={5}
-                            style={{ minHeight: 150, resize: "none" }}
-                            placeholder={formConfig.messagePlaceholder}
-                            required
-                            disabled={isPending}
-                            defaultValue=""
-                        />
-                        {errors.message && <div className="invalid-feedback">{errors.message}</div>}
+            )}
+
+            <form key={resetKey} id="contactForm" action={handleSubmit} className={styles.form} aria-busy={isPending}>
+                <div className={styles.fields}>
+                    <div className={styles.field}>
+                        <label htmlFor="name">Name <span aria-hidden="true">*</span></label>
+                        <input name="name" id="name" type="text" autoComplete="name" placeholder={formConfig.namePlaceholder} minLength={2} maxLength={50} required disabled={isPending} aria-invalid={!!errors.name} aria-describedby={errors.name ? "name-error" : undefined} />
+                        {errors.name && <p id="name-error" className={styles.fieldError}>{errors.name}</p>}
                     </div>
-                )}
+                    <div className={styles.field}>
+                        <label htmlFor="email">Email <span aria-hidden="true">*</span></label>
+                        <input name="email" id="email" type="email" autoComplete="email" placeholder={formConfig.emailPlaceholder} required disabled={isPending} aria-invalid={!!errors.email} aria-describedby={errors.email ? "email-error" : undefined} />
+                        {errors.email && <p id="email-error" className={styles.fieldError}>{errors.email}</p>}
+                    </div>
+                    <div className={`${styles.field} ${styles.fullWidth}`}>
+                        <label htmlFor="phone">Phone <span aria-hidden="true">*</span></label>
+                        <input name="phone" id="phone" type="tel" autoComplete="tel" placeholder={formConfig.phonePlaceholder} required disabled={isPending} aria-invalid={!!errors.phone} aria-describedby={errors.phone ? "phone-error" : undefined} />
+                        {errors.phone && <p id="phone-error" className={styles.fieldError}>{errors.phone}</p>}
+                    </div>
+                    <div className={`${styles.field} ${styles.fullWidth}`}>
+                        <label htmlFor="message">Message <span aria-hidden="true">*</span></label>
+                        <textarea name="message" id="message" rows={5} placeholder={formConfig.messagePlaceholder} minLength={10} maxLength={1000} required disabled={isPending} defaultValue="" aria-invalid={!!errors.message} aria-describedby={errors.message ? "message-error" : undefined} />
+                        {errors.message && <p id="message-error" className={styles.fieldError}>{errors.message}</p>}
+                    </div>
+                </div>
                 <Recaptcha />
-                <div className="mb-3">
-                    <button type="submit" className="button button-contactForm" disabled={isPending}>
-                        {isPending ? (
-                            <>
-                                <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                                Sending...
-                            </>
-                        ) : (
-                            formConfig.submitText
-                        )}
+                <div className={styles.actions}>
+                    <button type="submit" className={styles.submit} disabled={isPending}>
+                        {isPending ? "Sending…" : formConfig.submitText}
                     </button>
                 </div>
                 <NoScript>
-                    <div className="mt-3">
-                        <div className="alert alert-info">
-                            <p className="mb-0">
-                                <strong>Note:</strong> For enhanced form features and real-time validation, please enable JavaScript.
-                            </p>
-                        </div>
-                    </div>
+                    <p className={styles.hint}>For enhanced form features and real-time validation, please enable JavaScript.</p>
                 </NoScript>
             </form>
         </div>
