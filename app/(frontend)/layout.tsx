@@ -45,7 +45,7 @@ export const metadata: Metadata = {
     alternates: {
         canonical: "/",
     },
-    // og:image comes from the file convention: app/(frontend)/opengraph-image.png
+    // The default OG image is generated from public/logo.png by opengraph-image.tsx.
     openGraph: {
         type: "website",
         locale: "en_US",
