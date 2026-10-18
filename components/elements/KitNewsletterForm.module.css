@@ -1,0 +1,32 @@
+.embed {
+    width: 100%;
+    max-width: 700px;
+    margin-inline: auto;
+}
+
+.host :global(.formkit-form[data-uid="5b16268d1e"]) {
+    width: 100%;
+    max-width: 100%;
+    margin-inline: auto;
+}
+
+.status {
+    padding: 24px 0;
+    margin: 0;
+    text-align: center;
+    color: var(--text-primary);
+    font-family: var(--lora), serif;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.status a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.status a:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 4px;
+}
