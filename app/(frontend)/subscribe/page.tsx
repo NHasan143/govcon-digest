@@ -2,9 +2,8 @@
    (Newsletter archive and web editions are Phase 2 per the requirements doc.) */
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { Suspense } from 'react'
 import { SITE } from '@/lib/config'
-import NewsletterStatus from '@/components/elements/NewsletterStatus'
+import KitNewsletterForm from '@/components/elements/KitNewsletterForm'
 
 export const metadata: Metadata = {
     title: `The ${SITE.name} Newsletter`,
@@ -35,33 +34,8 @@ export default function NewsletterPage() {
                             Free, concise, and readable before your coffee gets cold.
                         </p>
                     </div>
-                    <div className="widget_newsletter border-radius-10 p-30 border">
-                        <form
-                            action="/api/newsletter"
-                            method="POST"
-                            className="subscribe_form relative mail_part"
-                        >
-                            <div className="form-newsletter-cover">
-                                <div className="form-newsletter d-flex">
-                                    <input
-                                        type="email"
-                                        name="EMAIL"
-                                        placeholder="Your email address"
-                                        required
-                                        aria-label="Email address"
-                                        style={{ flex: 1 }}
-                                    />
-                                    <button type="submit" className="font-weight-bold">
-                                        Subscribe
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                        <div className="text-center">
-                            <Suspense fallback={null}>
-                                <NewsletterStatus />
-                            </Suspense>
-                        </div>
+                    <div>
+                        <KitNewsletterForm />
                         <p className="font-x-small text-muted mt-15 mb-0 text-center">
                             No spam. Unsubscribe anytime. Read our{' '}
                             <Link href="/privacy">privacy policy</Link>.
