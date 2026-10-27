@@ -1,4 +1,6 @@
 import { APIError, type CollectionConfig } from 'payload'
+import { publicQueryAllowlist, USER_PUBLIC_QUERIES } from '../access/publicQueries'
+import { signedIn, stripPrivateUserFields } from '../access/userPrivacy'
 import { enforceMfa } from '../mfa/enforceMfa'
 import { formatSlug } from '../utils/formatSlug'
 
@@ -10,6 +12,8 @@ export const Users: CollectionConfig = {
         defaultColumns: ['name', 'email', 'role'],
     },
     access: {
+        // Public because articles show their author. Only name, slug and
+        // socials ever reach anonymous visitors — see payload/access/userPrivacy.ts.
         read: () => true,
         admin: ({ req }) => req.user?.role === 'admin' || req.user?.role === 'editor',
         create: ({ req }) => req.user?.role === 'admin',
@@ -17,6 +21,8 @@ export const Users: CollectionConfig = {
         delete: ({ req }) => req.user?.role === 'admin',
     },
     hooks: {
+        beforeOperation: [publicQueryAllowlist(USER_PUBLIC_QUERIES)],
+        afterRead: [stripPrivateUserFields],
         beforeLogin: [enforceMfa],
         beforeChange: [async ({ data, originalDoc, req, operation }) => {
             if (operation === 'update' && originalDoc?.role === 'admin' && data.role && data.role !== 'admin') {
@@ -43,6 +49,12 @@ export const Users: CollectionConfig = {
         }],
     },
     fields: [
+        {
+            // Merged into Payload's built-in email field — only adds the read rule.
+            name: 'email',
+            type: 'email',
+            access: { read: signedIn },
+        },
         {
             name: 'name',
             type: 'text',
@@ -79,6 +91,7 @@ export const Users: CollectionConfig = {
         {
             name: 'role',
             access: {
+                read: signedIn,
                 create: ({ req }) => req.user?.role === 'admin',
                 update: ({ req }) => req.user?.role === 'admin',
             },
@@ -94,13 +107,14 @@ export const Users: CollectionConfig = {
         {
             name: 'mfa',
             type: 'group',
+            access: { read: signedIn },
             admin: {
                 position: 'sidebar',
             },
             fields: [
                 {
                     name: 'enabled',
-                    access: { create: () => false, update: () => false },
+                    access: { read: signedIn, create: () => false, update: () => false },
                     type: 'checkbox',
                     defaultValue: false,
                     admin: {

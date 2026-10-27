@@ -59,8 +59,20 @@ way to update MFA secrets and enrollment flags.
 ```sh
 node --import tsx scripts/test-cms-auth.ts
 node --env-file=.env --import tsx scripts/test-user-management.ts
+DATABASE_URI=file:/path/to/a-copy.db node --env-file=.env --import tsx scripts/test-public-access.ts
 npx tsc --noEmit --incremental false
 ```
+
+The public-access test checks what a logged-out visitor can learn about CMS
+accounts. They may see an author's name, page slug and social links, and
+nothing else. They can't filter, sort or count users (or articles through
+`author.*`) by email, role, 2FA status, sessions or password fields. More
+broadly, anonymous queries on Posts, News, Users and Media may only use the
+fields the website itself filters on — everything else, including article
+content, is refused with a 403. The rules live in `payload/access/userPrivacy.ts`
+(what a response contains) and `payload/access/publicQueries.ts` (what can be
+queried). Both are allowlists, so a new field stays private until it's
+explicitly added. Run the test against a copy of the database.
 
 The user-management test creates a temporary editor, checks permissions and
 session revocation, then removes it. Run it against the local development
