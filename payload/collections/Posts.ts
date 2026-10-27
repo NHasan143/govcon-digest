@@ -1,4 +1,5 @@
 import { APIError, type CollectionConfig, type Where } from 'payload'
+import { POST_PUBLIC_QUERIES, publicQueryAllowlist } from '../access/publicQueries'
 import { articleSlugField } from '../fields/articleSlug'
 import { customSchemaField } from '../fields/customSchema'
 import { CATEGORY_OPTIONS } from '../../lib/categories'
@@ -31,6 +32,9 @@ export const Posts: CollectionConfig = {
                   } as Where),
     },
     hooks: {
+        // Anonymous visitors may only filter/sort on the fields the site uses —
+        // see payload/access/publicQueries.ts.
+        beforeOperation: [publicQueryAllowlist(POST_PUBLIC_QUERIES)],
         beforeChange: [
             // Homepage hero rules: 'featured' fills the right column (hard cap
             // of MAX_FEATURED), 'sliderFeatured' fills the left slider

@@ -1,4 +1,5 @@
 import { type CollectionConfig, type Where } from 'payload'
+import { NEWS_PUBLIC_QUERIES, publicQueryAllowlist } from '../access/publicQueries'
 import { articleSlugField } from '../fields/articleSlug'
 import { customSchemaField } from '../fields/customSchema'
 import { CATEGORY_OPTIONS } from '../../lib/categories'
@@ -22,6 +23,11 @@ export const News: CollectionConfig = {
     },
     versions: {
         drafts: true,
+    },
+    hooks: {
+        // Anonymous visitors may only filter/sort on the fields the site uses —
+        // see payload/access/publicQueries.ts.
+        beforeOperation: [publicQueryAllowlist(NEWS_PUBLIC_QUERIES)],
     },
     access: {
         // Public: published AND not hidden. Logged-in CMS users see everything.
