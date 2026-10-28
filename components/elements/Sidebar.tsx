@@ -21,6 +21,15 @@ export default function Sidebar({ display }: { display?: string }) {
                 <div className="form-newsletter-cover">
                   <div className="form-newsletter">
                     <input type="email" name="EMAIL" placeholder="Email address" required />
+                    {/* Honeypot: invisible to people, filled in by bots. Checked in subscribeNewsletterServer. */}
+                    <input
+                      type="text"
+                      name="website"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      aria-hidden="true"
+                      style={{ position: "absolute", left: "-10000px", width: "1px", height: "1px", overflow: "hidden" }}
+                    />
                     <button type="submit">
                       <span className="long-arrow long-arrow-right" />
                     </button>

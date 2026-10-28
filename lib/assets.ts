@@ -381,29 +381,12 @@ export const AUTHOR_IMAGES = {
 export const UI_IMAGES = {
     // Logo and branding
     logo: {
-        src: '/assets/imgs/theme/favicon.png',
+        src: '/logo.png',
         alt: `${SITE.name} Logo`,
-        width: 32,
-        height: 32,
+        width: 690,
+        height: 259,
         type: 'ui' as const,
         purpose: 'logo' as const
-    },
-    favicon: {
-        src: '/assets/imgs/theme/favicon.svg',
-        alt: `${SITE.name} Favicon`,
-        width: 16,
-        height: 16,
-        type: 'ui' as const,
-        purpose: 'icon' as const
-    },
-    // Background patterns
-    pattern: {
-        src: '/assets/imgs/theme/pattern.jpg',
-        alt: 'Decorative background pattern',
-        width: 1920,
-        height: 1080,
-        type: 'ui' as const,
-        purpose: 'background' as const
     },
     // Advertisement images
     ad1: {
@@ -421,15 +404,6 @@ export const UI_IMAGES = {
         height: 250,
         type: 'ui' as const,
         purpose: 'ad' as const
-    },
-    // Error pages
-    error404: {
-        src: '/assets/imgs/theme/404.png',
-        alt: 'Page not found',
-        width: 400,
-        height: 300,
-        type: 'ui' as const,
-        purpose: 'icon' as const
     },
     // Contact page
     contact: {
@@ -566,26 +540,6 @@ export const SLIDE_IMAGES = {
     }
 };
 
-// Wave line SVGs
-export const WAVE_LINES = {
-    wave1: {
-        src: '/assets/imgs/theme/wave-line-1.svg',
-        alt: 'Decorative wave line 1',
-        width: 100,
-        height: 20,
-        type: 'ui' as const,
-        purpose: 'icon' as const
-    },
-    wave2: {
-        src: '/assets/imgs/theme/wave-line-2.svg',
-        alt: 'Decorative wave line 2',
-        width: 100,
-        height: 20,
-        type: 'ui' as const,
-        purpose: 'icon' as const
-    }
-};
-
 // Utility functions
 export function getAssetByKey(key: string): AssetType | null {
     const allAssets = {
@@ -593,8 +547,7 @@ export function getAssetByKey(key: string): AssetType | null {
         ...THUMBNAIL_IMAGES,
         ...AUTHOR_IMAGES,
         ...UI_IMAGES,
-        ...SLIDE_IMAGES,
-        ...WAVE_LINES
+        ...SLIDE_IMAGES
     };
 
     return allAssets[key as keyof typeof allAssets] || null;
@@ -606,8 +559,7 @@ export function getAssetsByType(type: 'article' | 'author' | 'ui'): AssetType[] 
         ...THUMBNAIL_IMAGES,
         ...AUTHOR_IMAGES,
         ...UI_IMAGES,
-        ...SLIDE_IMAGES,
-        ...WAVE_LINES
+        ...SLIDE_IMAGES
     };
 
     return Object.values(allAssets).filter(asset => asset.type === type);

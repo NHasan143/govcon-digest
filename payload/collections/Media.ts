@@ -9,7 +9,10 @@ import { MEDIA_PUBLIC_QUERIES, publicQueryAllowlist } from '../access/publicQuer
 // project. MEDIA_DIR (absolute, or relative to the working directory) points
 // production at a folder that survives deploys; unset, it's ./media in the
 // project folder, which is what local development uses.
-export const mediaDir = (): string => path.resolve(process.cwd(), process.env.MEDIA_DIR || 'media')
+// The turbopackIgnore comment keeps the build from tracing this runtime folder
+// (it would otherwise treat the whole project as server files).
+export const mediaDir = (): string =>
+    path.resolve(/* turbopackIgnore: true */ process.cwd(), process.env.MEDIA_DIR || 'media')
 
 export const Media: CollectionConfig = {
     slug: 'media',
@@ -23,7 +26,10 @@ export const Media: CollectionConfig = {
     },
     upload: {
         staticDir: mediaDir(),
-        mimeTypes: ['image/*', 'video/mp4'],
+        // Raster images only. No SVG (it can carry scripts and is served from
+        // our own domain) and no video (nothing on the site displays uploaded
+        // video). Payload checks the file's actual content, not just its name.
+        mimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/avif', 'image/gif'],
         adminThumbnail: 'thumbnail',
         imageSizes: [
             { name: 'thumbnail', width: 400, height: 300, position: 'centre' },

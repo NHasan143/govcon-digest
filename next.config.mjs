@@ -1,5 +1,32 @@
+// Security headers sent on every response (pages, API, CMS, files).
+// HSTS is only sent when the site URL is https — browsers would then refuse
+// plain HTTP for a year, so it must never go out before HTTPS works.
+// NEXT_PUBLIC_SITE_URL is read at build time, like the rest of next.config.
+// includeSubDomains is deliberately off until every govcondigest.com
+// subdomain (mail, webmail, …) is confirmed to serve HTTPS.
+const isHttps = (process.env.NEXT_PUBLIC_SITE_URL || '').startsWith('https://');
+const securityHeaders = [
+    ...(isHttps ? [{ key: 'Strict-Transport-Security', value: 'max-age=31536000' }] : []),
+    // Never guess a file's type from its content — serve it as declared.
+    { key: 'X-Content-Type-Options', value: 'nosniff' },
+    // Only our own pages may embed ours in a frame (clickjacking).
+    // X-Frame-Options for older browsers, CSP frame-ancestors for current ones.
+    // This CSP sets ONLY frame-ancestors — it doesn't restrict scripts, so
+    // the Kit embed, reCAPTCHA and the Payload admin are unaffected.
+    { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
+    { key: 'Content-Security-Policy', value: "frame-ancestors 'self'" },
+    // Other sites see only our domain, never the full page URL.
+    { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+    // Nothing on the site (or any embed) may use these.
+    { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
+];
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+    // Don't advertise the stack. Also stops Payload's withPayload adding
+    // "X-Powered-By: Next.js, Payload".
+    poweredByHeader: false,
+
     // Optimize CSS processing
     experimental: {
         // optimizeCss: true, // Temporarily disabled due to critters issues
@@ -10,28 +37,18 @@ const nextConfig = {
     // Configure asset optimization
     images: {
         formats: ['image/webp', 'image/avif'],
-        // Enable image caching
+        // Optimized-image cache lifetime in seconds. Set explicitly: Next.js 16
+        // changed the default from 60 to 14400 (4 hours).
         minimumCacheTTL: 60,
-        dangerouslyAllowSVG: true,
+        // SVGs are never passed through the optimizer (no dangerouslyAllowSVG).
+        // This CSP still locks down every optimized image response.
         contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
     },
 
-    // Enable CSS optimization
-    webpack: (config, { dev, isServer }) => {
-        // Optimize CSS in production
-        if (!dev && !isServer) {
-            config.optimization.splitChunks.cacheGroups.styles = {
-                name: 'styles',
-                test: /\.(css|scss)$/,
-                chunks: 'all',
-                enforce: true,
-            };
-        }
+    // No custom `webpack` function: Next.js 16 builds with Turbopack, which
+    // ignores webpack config, and `next build` fails if one is present.
 
-        return config;
-    },
-
-    // Cache configuration for Next.js 15
+    // Every build gets a new ID, so cache-busting is automatic
     generateBuildId: async () => {
         return 'build-' + Date.now();
     },
@@ -39,11 +56,15 @@ const nextConfig = {
     // Enable compression
     compress: true,
 
-    // Configure headers for caching.
-    // Scoped to the mock-data endpoints only — the Payload REST API also
-    // lives under /api and must never get a public cache header.
+    // Security headers on everything, plus cache headers.
+    // Cache headers are scoped to the mock-data endpoints only — the Payload
+    // REST API also lives under /api and must never get a public cache header.
     async headers() {
         return [
+            {
+                source: '/:path*',
+                headers: securityHeaders,
+            },
             {
                 source: '/api/(articles|authors|categories)/:path*',
                 headers: [
@@ -75,12 +96,7 @@ const nextConfig = {
     },
 };
 
-// Bundle analyzer configuration
-import bundleAnalyzer from '@next/bundle-analyzer';
+// Bundle analysis: `npm run analyze` (Next.js 16's built-in `next analyze`).
 import { withPayload } from '@payloadcms/next/withPayload';
 
-const withBundleAnalyzer = bundleAnalyzer({
-    enabled: process.env.ANALYZE === 'true',
-});
-
-export default withPayload(withBundleAnalyzer(nextConfig));
+export default withPayload(nextConfig);

@@ -1,8 +1,10 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
+import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
+import { clientIp, RATE_LIMIT_MESSAGE, rateLimit } from '@/lib/rateLimit';
 
 // Contact form validation schema
 const ContactFormSchema = z.object({
@@ -41,6 +43,11 @@ async function verifyRecaptcha(formData: FormData): Promise<string | null> {
 
 // Contact form submission server action
 export async function submitContactForm(formData: FormData) {
+    // Per-IP throttle, counted before any other work so floods stay cheap.
+    if (!rateLimit('contact', clientIp(await headers())).ok) {
+        return { success: false, code: 'rate_limited' as const, message: RATE_LIMIT_MESSAGE };
+    }
+
     try {
         const captchaError = await verifyRecaptcha(formData);
         if (captchaError) {

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import { NextRequest } from 'next/server'
 import * as otplibModule from 'otplib'
-import { middleware } from '../middleware'
+import { proxy } from '../proxy'
 import { generateSecret, otpauthUri, verifyToken } from '../payload/mfa/totp'
 import { enforceMfa } from '../payload/mfa/enforceMfa'
 import { Users } from '../payload/collections/Users'
@@ -15,13 +15,13 @@ for (const [path, destination] of [
     ['/dorbar', '/newsroom'],
     ['/dorbar/collections/posts?limit=10', '/newsroom/collections/posts?limit=10'],
 ]) {
-    const response = middleware(new NextRequest(origin + path))
+    const response = proxy(new NextRequest(origin + path))
     assert.equal(response.headers.get('location'), origin + destination)
 }
-assert.equal(middleware(new NextRequest(origin + '/newsroom/sign-in')).headers.get('x-middleware-next'), '1')
-assert.equal(middleware(new NextRequest(origin + '/newsroom', { headers: { cookie: 'payload-token=existing-session' } })).headers.get('x-middleware-next'), '1')
-assert.equal(middleware(new NextRequest(origin + '/newsroom/create-first-user')).headers.get('x-middleware-next'), '1')
-assert.match(middleware(new NextRequest(origin + '/newsroom/login')).headers.get('set-cookie') || '', /payload-token=;/)
+assert.equal(proxy(new NextRequest(origin + '/newsroom/sign-in')).headers.get('x-middleware-next'), '1')
+assert.equal(proxy(new NextRequest(origin + '/newsroom', { headers: { cookie: 'payload-token=existing-session' } })).headers.get('x-middleware-next'), '1')
+assert.equal(proxy(new NextRequest(origin + '/newsroom/create-first-user')).headers.get('x-middleware-next'), '1')
+assert.match(proxy(new NextRequest(origin + '/newsroom/login')).headers.get('set-cookie') || '', /payload-token=;/)
 
 const otplib = ((otplibModule as Record<string, unknown>).default ?? otplibModule) as typeof import('otplib')
 const secret = generateSecret()

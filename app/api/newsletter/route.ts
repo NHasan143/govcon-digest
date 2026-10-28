@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { subscribeNewsletterServer } from '@/app/actions/forms';
+import { RATE_LIMIT_MESSAGE } from '@/lib/rateLimit';
 
 // A plain (no-JS) form POST has nowhere to render its result, so the visitor
 // is sent back to the page they submitted from with a `?subscribed=` flag that
@@ -34,6 +35,15 @@ export async function POST(request: NextRequest) {
     try {
         const formData = await request.formData();
         const result = await subscribeNewsletterServer(formData, path);
+        if (result.code === 'rate_limited') {
+            return new NextResponse(RATE_LIMIT_MESSAGE, {
+                status: 429,
+                headers: {
+                    'Content-Type': 'text/plain; charset=utf-8',
+                    'Retry-After': String(result.retryAfterSeconds ?? 600),
+                },
+            });
+        }
         return backTo(request, path, result.code);
     } catch (error) {
         console.error('Newsletter API error:', error);

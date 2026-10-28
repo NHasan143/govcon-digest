@@ -58,8 +58,10 @@ way to update MFA secrets and enrollment flags.
 
 ```sh
 node --import tsx scripts/test-cms-auth.ts
+node --import tsx scripts/test-rate-limit.ts
 node --env-file=.env --import tsx scripts/test-user-management.ts
 DATABASE_URI=file:/path/to/a-copy.db node --env-file=.env --import tsx scripts/test-public-access.ts
+DATABASE_URI=file:/path/to/a-copy.db MEDIA_DIR=/path/to/a-media-copy node --env-file=.env --import tsx scripts/test-upload-types.ts
 npx tsc --noEmit --incremental false
 ```
 
@@ -73,6 +75,12 @@ content, is refused with a 403. The rules live in `payload/access/userPrivacy.ts
 (what a response contains) and `payload/access/publicQueries.ts` (what can be
 queried). Both are allowlists, so a new field stays private until it's
 explicitly added. Run the test against a copy of the database.
+
+The upload-types test uploads, as a temporary editor, one real image in each
+allowed format (JPEG, PNG, WebP, AVIF, GIF) and checks thumbnails are made, then
+tries SVGs and disguised files (an SVG renamed `.png`, HTML or text renamed as
+an image, a PDF renamed `.png`) and expects every one to be rejected. It writes
+files, so it refuses to run unless `MEDIA_DIR` points at a scratch folder.
 
 The user-management test creates a temporary editor, checks permissions and
 session revocation, then removes it. Run it against the local development
