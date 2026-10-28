@@ -1,5 +1,6 @@
 import { APIError, type CollectionConfig } from 'payload'
 import { publicQueryAllowlist, USER_PUBLIC_QUERIES } from '../access/publicQueries'
+import { rateLimitAuth } from '../access/rateLimitAuth'
 import { signedIn, stripPrivateUserFields } from '../access/userPrivacy'
 import { enforceMfa } from '../mfa/enforceMfa'
 import { formatSlug } from '../utils/formatSlug'
@@ -21,7 +22,7 @@ export const Users: CollectionConfig = {
         delete: ({ req }) => req.user?.role === 'admin',
     },
     hooks: {
-        beforeOperation: [publicQueryAllowlist(USER_PUBLIC_QUERIES)],
+        beforeOperation: [rateLimitAuth, publicQueryAllowlist(USER_PUBLIC_QUERIES)],
         afterRead: [stripPrivateUserFields],
         beforeLogin: [enforceMfa],
         beforeChange: [async ({ data, originalDoc, req, operation }) => {

@@ -33,7 +33,7 @@ export async function createArticle(data: CreateArticleData) {
         };
 
         // Revalidate cache
-        revalidateTag('articles');
+        revalidateTag('articles', 'max');
         revalidatePath('/');
         revalidatePath('/category');
         revalidatePath('/author');
@@ -52,7 +52,7 @@ export async function updateArticle(data: UpdateArticleData) {
         await new Promise(resolve => setTimeout(resolve, 300));
 
         // Revalidate cache
-        revalidateTag('articles');
+        revalidateTag('articles', 'max');
         revalidatePath(`/single/${data.id}`);
         revalidatePath('/');
         revalidatePath('/category');
@@ -72,7 +72,7 @@ export async function deleteArticle(id: string) {
         await new Promise(resolve => setTimeout(resolve, 200));
 
         // Revalidate cache
-        revalidateTag('articles');
+        revalidateTag('articles', 'max');
         revalidatePath('/');
         revalidatePath('/category');
         revalidatePath('/author');

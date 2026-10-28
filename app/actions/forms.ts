@@ -2,8 +2,10 @@
 
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
+import { headers } from 'next/headers';
 import { getPayload } from 'payload';
 import config from '@payload-config';
+import { clientIp, RATE_LIMIT_MESSAGE, rateLimit } from '@/lib/rateLimit';
 
 // Contact form schema
 const ContactFormSchema = z.object({
@@ -183,6 +185,28 @@ function isDuplicateEmailError(error: unknown): boolean {
 // `subscribers` collection — overrideAccess is required because that
 // collection denies anonymous create (see payload/collections/Subscribers.ts).
 export async function subscribeNewsletterServer(formData: FormData, source?: string) {
+    // Per-IP throttle, counted before any other work so floods stay cheap.
+    const limited = rateLimit('newsletter', clientIp(await headers()));
+    if (!limited.ok) {
+        return {
+            success: false,
+            code: 'rate_limited' as const,
+            message: RATE_LIMIT_MESSAGE,
+            retryAfterSeconds: limited.retryAfterSeconds,
+        };
+    }
+
+    // Honeypot: the `website` field is hidden from people, so only bots fill
+    // it in. Report success so the bot moves on, but store nothing.
+    const honeypot = formData.get('website');
+    if (typeof honeypot === 'string' && honeypot.trim() !== '') {
+        return {
+            success: true,
+            code: 'subscribed' as const,
+            message: 'Thank you for subscribing to our newsletter!',
+        };
+    }
+
     let validatedData: z.infer<typeof NewsletterSchema>;
 
     try {

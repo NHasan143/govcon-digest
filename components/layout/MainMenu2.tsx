@@ -1,6 +1,5 @@
 "use client";
 import Link from "next/link";
-import Image from "next/image";
 import { useState } from "react";
 
 export default function MainMenu() {
@@ -117,9 +116,6 @@ export default function MainMenu() {
                                         <Link href="/signup">Register page</Link>
                                     </li>
                                 </ul>
-                                <div className="col-md-2 text-center">
-                                    <Image src="/assets/imgs/theme/pattern.jpg" width={100} height={99} alt="newsboard" />
-                                </div>
                             </div>
                         </div>
                     </div>

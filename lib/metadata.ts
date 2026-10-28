@@ -23,7 +23,7 @@ export function generateStructuredData(type: 'article' | 'author' | 'organizatio
                     name: SITE.name,
                     logo: {
                         '@type': 'ImageObject',
-                        url: `${baseUrl}/assets/imgs/theme/favicon.png`,
+                        url: `${baseUrl}/logo.png`,
                     },
                 },
                 datePublished: data.publishedAt,
@@ -66,7 +66,7 @@ export function generateStructuredData(type: 'article' | 'author' | 'organizatio
                 url: `${baseUrl}/`,
                 logo: {
                     '@type': 'ImageObject',
-                    url: `${baseUrl}/assets/imgs/theme/favicon.png`,
+                    url: `${baseUrl}/logo.png`,
                 },
                 description: SITE.description,
                 email: SITE.emails.contact,
@@ -124,7 +124,7 @@ export function generateStructuredData(type: 'article' | 'author' | 'organizatio
                     name: SITE.name,
                     logo: {
                         '@type': 'ImageObject',
-                        url: `${baseUrl}/assets/imgs/theme/favicon.png`,
+                        url: `${baseUrl}/logo.png`,
                     },
                 },
                 potentialAction: {

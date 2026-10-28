@@ -84,7 +84,6 @@ export const metadata: Metadata = {
         "apple-mobile-web-app-title": SITE.name,
         "format-detection": "telephone=no",
         "mobile-web-app-capable": "yes",
-        "msapplication-config": "/browserconfig.xml",
         "msapplication-TileColor": "#df4a2c",
         "msapplication-tap-highlight": "no",
         "theme-color": "#df4a2c",
@@ -101,7 +100,7 @@ export default function RootLayout({
     const organizationStructuredData = generateStructuredData("organization", {});
 
     return (
-        <html lang="en">
+        <html lang="en" data-scroll-behavior="smooth">
             <head>
                 {/* Structured Data for Website */}
                 <script

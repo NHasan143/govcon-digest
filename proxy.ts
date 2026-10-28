@@ -3,7 +3,8 @@ import { NextRequest, NextResponse } from 'next/server'
 const ADMIN_PATH = '/newsroom'
 const SIGN_IN_PATH = '/newsroom/sign-in'
 
-export function middleware(req: NextRequest) {
+// Next.js 16 "proxy" (formerly middleware). Runs on the Node.js runtime.
+export function proxy(req: NextRequest) {
     const { pathname } = req.nextUrl
 
     // Keep existing bookmarks working after moving the editorial workspace.
