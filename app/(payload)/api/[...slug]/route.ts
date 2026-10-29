@@ -1,6 +1,6 @@
 /* Payload REST API — /api/users, /api/posts, /api/media, etc.
-   The site's own mock endpoints (/api/articles, ...) are static routes and
-   take precedence over this catch-all. */
+   The site's own static routes (/api/newsletter) take precedence over this
+   catch-all. */
 import config from '@payload-config'
 import '@payloadcms/next/css'
 import {

@@ -4,7 +4,6 @@ import type { FC } from "react";
 import BackToTop from "@/components/elements/BackToTop";
 import Footer from "@/components/layout/footer/Footer";
 import Header from "@/components/layout/header/Header";
-import Header2 from "@/components/layout/header/Header2";
 import ScrollProgress from "@/components/elements/ScrollProgress";
 import PerformanceMonitor from "@/components/elements/PerformanceMonitor";
 
@@ -16,7 +15,6 @@ const BootstrapComponents = dynamic<BootstrapComponentsProps>(() => import("@/ut
 }) as FC<BootstrapComponentsProps>;
 
 interface LayoutProps {
-  headerStyle?: number;
   children?: React.ReactNode;
   margin?: string;
   showHeader?: boolean;
@@ -27,7 +25,6 @@ interface LayoutProps {
 }
 
 export default function Layout({
-  headerStyle,
   children,
   margin = "",
   showHeader = true,
@@ -44,12 +41,7 @@ export default function Layout({
       <div id="top" />
       {showScrollProgress && <ScrollProgress />}
       <BootstrapComponents />
-      {showHeader && (
-        <>
-          {!headerStyle && <Header />}
-          {headerStyle === 2 && <Header2 />}
-        </>
-      )}
+      {showHeader && <Header />}
       <main className={`${margin} ${className}`}>
         <div className="container">{children}</div>
       </main>

@@ -65,7 +65,6 @@ Set these values, along with the publication's other settings:
 
 ```dotenv
 NEXT_PUBLIC_SITE_URL=https://govcondigest.com
-NEXT_PUBLIC_API_URL=https://govcondigest.com/api
 DATABASE_URI=file:./data/payload.db
 
 PAYLOAD_SECRET=YOUR_RANDOM_SECRET

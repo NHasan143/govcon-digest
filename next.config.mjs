@@ -56,32 +56,14 @@ const nextConfig = {
     // Enable compression
     compress: true,
 
-    // Security headers on everything, plus cache headers.
-    // Cache headers are scoped to the mock-data endpoints only — the Payload
-    // REST API also lives under /api and must never get a public cache header.
+    // Security headers on everything, plus long-lived caching for static
+    // assets. Never add a public cache header under /api — the Payload REST
+    // API lives there and serves signed-in users' data.
     async headers() {
         return [
             {
                 source: '/:path*',
                 headers: securityHeaders,
-            },
-            {
-                source: '/api/(articles|authors|categories)/:path*',
-                headers: [
-                    {
-                        key: 'Cache-Control',
-                        value: 'public, s-maxage=3600, stale-while-revalidate=7200',
-                    },
-                ],
-            },
-            {
-                source: '/api/(articles|authors|categories)',
-                headers: [
-                    {
-                        key: 'Cache-Control',
-                        value: 'public, s-maxage=3600, stale-while-revalidate=7200',
-                    },
-                ],
             },
             {
                 source: '/assets/:path*',
