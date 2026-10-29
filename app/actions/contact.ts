@@ -2,7 +2,6 @@
 
 import { revalidatePath } from 'next/cache';
 import { headers } from 'next/headers';
-import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import { clientIp, RATE_LIMIT_MESSAGE, rateLimit } from '@/lib/rateLimit';
 
@@ -104,49 +103,3 @@ export async function submitContactForm(formData: FormData) {
         };
     }
 }
-
-// Newsletter subscription server action
-export async function subscribeNewsletter(formData: FormData) {
-    try {
-        const email = formData.get('email') as string;
-        const name = formData.get('name') as string;
-
-        // Validate email
-        const emailSchema = z.string().email('Please enter a valid email address');
-        const validatedEmail = emailSchema.parse(email);
-
-        // Simulate processing time
-        await new Promise(resolve => setTimeout(resolve, 500));
-
-        // Here you would typically:
-        // 1. Save to newsletter subscribers database
-        // 2. Send welcome email
-        // 3. Add to email marketing list
-        console.log('Newsletter subscription:', { email: validatedEmail, name });
-
-        return {
-            success: true,
-            message: 'Thank you for subscribing to our newsletter!'
-        };
-
-    } catch (error) {
-        console.error('Newsletter subscription error:', error);
-
-        if (error instanceof z.ZodError) {
-            return {
-                success: false,
-                message: 'Please enter a valid email address.',
-                errors: error.issues.map((err: z.ZodIssue) => ({
-                    field: err.path.join('.'),
-                    message: err.message
-                }))
-            };
-        }
-
-        return {
-            success: false,
-            message: 'Something went wrong. Please try again later.',
-            error: 'Internal server error'
-        };
-    }
-} 

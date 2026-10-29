@@ -43,7 +43,7 @@ export default function NoScriptFallback({
                                         <strong>Alternative options:</strong>
                                     </p>
                                     <ul className="mb-0">
-                                        <li>Use our <Link href="/basic-search" className="alert-link">basic search</Link></li>
+                                        <li>Use our <Link href="/search" className="alert-link">search page</Link></li>
                                         <li>Contact us via <a href={`mailto:${SITE.emails.contact}`} className="alert-link">email</a></li>
                                     </ul>
                                 </div>
@@ -80,7 +80,7 @@ export function NoScriptWarning() {
                                 <strong>Alternative options:</strong>
                             </p>
                             <ul className="mb-0">
-                                <li>Use our <Link href="/basic-search" className="alert-link">basic search</Link></li>
+                                <li>Use our <Link href="/search" className="alert-link">search page</Link></li>
                                 <li>Contact us via <a href={`mailto:${SITE.emails.contact}`} className="alert-link">email</a></li>
                             </ul>
                         </div>

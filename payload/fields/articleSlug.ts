@@ -13,11 +13,14 @@ import { CATEGORIES } from '../../lib/categories'
    app/(frontend)/ — add a name here whenever a new top-level page is created. */
 const RESERVED_SLUGS = new Set([
     // app/(frontend)/
-    'about', 'author', 'authors', 'basic-search', 'category', 'category-big',
-    'category-grid', 'category-list', 'category-masonry', 'contact',
-    'cookie-policy', 'editorial-standards', 'home-2', 'home-3', 'latest',
-    'login', 'newsletter', 'privacy', 'search', 'signup', 'single', 'single-2',
-    'single-3', 'stories', 'subscribe', 'terms', 'topic', 'topics', 'typography',
+    'about', 'author', 'authors', 'contact', 'cookie-policy',
+    'editorial-standards', 'latest', 'newsletter', 'privacy', 'search',
+    'stories', 'subscribe', 'terms', 'topic', 'topics',
+    // Removed template demo pages. Kept reserved so no article takes a
+    // generic URL like /login or /category that we may want for a page later.
+    'basic-search', 'category', 'category-big', 'category-grid',
+    'category-list', 'category-masonry', 'home-2', 'home-3', 'login', 'signup',
+    'single', 'single-2', 'single-3', 'typography',
     // app/ root, the admin panel, the login gate and static assets
     'api', 'actions', 'dorbar', 'newsroom', 'cms-login', 'assets', 'media', 'page',
 ])

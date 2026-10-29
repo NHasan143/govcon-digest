@@ -12,22 +12,6 @@ export default function robots(): MetadataRoute.Robots {
                     "/_next/",
                     // Search results are noindex — keep crawlers out entirely
                     "/search",
-                    "/basic-search",
-                    // Template demo layouts kept in the codebase but not part
-                    // of the public site — never crawl or index these
-                    "/single",
-                    "/single-2",
-                    "/single-3",
-                    "/home-2",
-                    "/home-3",
-                    "/category",
-                    "/category-big",
-                    "/category-grid",
-                    "/category-list",
-                    "/category-masonry",
-                    "/login",
-                    "/signup",
-                    "/typography",
                     "/cms-login",
                 ],
             },
